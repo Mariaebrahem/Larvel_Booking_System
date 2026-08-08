@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->softDeletes(); // مطلوب منك في المهام (Soft Delete)
             $table->timestamps();
         });
     }
