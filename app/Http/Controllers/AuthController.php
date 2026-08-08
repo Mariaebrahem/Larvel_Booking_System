@@ -37,8 +37,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json(['message' => 'User logged in.', 'user' => Auth::user()]);
-            
+            return redirect()->intended('/cities');
         }
  
         return response()->json(['message' => 'The provided credentials do not match our records.'], 401);
@@ -50,6 +49,6 @@ class AuthController extends Controller
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        return response()->json(['message' => 'User logged out.']);
+        return redirect('/login');
     }
 }

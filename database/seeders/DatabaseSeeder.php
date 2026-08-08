@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create('ar_SA'); // استخدام اللغة العربية للبيانات العشوائية
+        $faker = Faker::create('ar_SA');
 
-        // 1. حسابات الأساسية (Admin & User)
+        // 1. حسابات أساسية (Admin & User)
         DB::table('users')->insert([
             [
                 'name' => 'Admin User',
@@ -52,18 +52,8 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 3. أنواع الغرف
-        $roomTypes = ['غرفة مفردة (Single)', 'غرفة مزدوجة (Double)', 'جناح جونيور (Junior Suite)', 'جناح ملكي (Royal Suite)', 'فيلا خاصة (Villa)'];
-        $typeIds = [];
-        foreach ($roomTypes as $typeName) {
-            $typeIds[] = DB::table('room_types')->insertGetId([
-                'name' => $typeName,
-                'created_at' => now(), 'updated_at' => now(),
-            ]);
-        }
-
-        // 4. خدمات الفندق (Amenities)
-        $amenities = ['واي فاي مجاني', 'حمام سباحة', 'إفطار مجاني', 'تكييف هواء', 'إطلالة على البحر', 'صالة ألعاب رياضية (Gym)', 'سبا (Spa)', 'خدمة غرف 24/7', 'موقف سيارات'];
+        // 3. خدمات الفندق (Amenities)
+        $amenities = ['واي فاي مجاني', 'حمام سباحة', 'إفطار مجاني', 'تكييف هواء', 'إطلالة على البحر', 'صالة ألعاب رياضية', 'سبا', 'خدمة غرف 24/7', 'موقف سيارات'];
         $amenityIds = [];
         foreach ($amenities as $amenityName) {
             $amenityIds[] = DB::table('amenities')->insertGetId([
@@ -72,31 +62,50 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 5. توليد 30 فندق مختلف
+        // أنواع الغرف المتاحة (نص عادي في نسختنا)
+        $roomTypes = ['Single', 'Double', 'Junior Suite', 'Royal Suite', 'Villa'];
+
+        // 4. توليد 30 فندق مختلف
         $hotelPrefixes = ['فندق', 'منتجع', 'جراند فندق', 'بنسيون'];
         $hotelNames = ['الماسة', 'هيلتون', 'شيراتون', 'فورسيزونز', 'ريتز كارلتون', 'موفنبيك', 'فلسطين', 'شتايجنبرجر', 'ماريوت', 'سوفيتيل', 'تيوليب', 'رويال'];
 
         for ($h = 1; $h <= 30; $h++) {
             $hotelName = $faker->randomElement($hotelPrefixes) . ' ' . $faker->randomElement($hotelNames) . ' ' . $h;
-            
+
             $hotelId = DB::table('hotels')->insertGetId([
-                'name' => $hotelName,
-                'address' => $faker->streetAddress(),
-                'rating' => $faker->randomFloat(1, 3, 5), // تقييم عشوائي بين 3.0 و 5.0
                 'city_id' => $faker->randomElement($cityIds),
+                'name' => $hotelName,
+                'description' => $faker->sentence(10),
+                'address' => $faker->streetAddress(),
+                'rating' => $faker->randomFloat(1, 3, 5),
                 'created_at' => now(), 'updated_at' => now(),
             ]);
 
-            // توليد من 10 إلى 20 غرفة لكل فندق (المجموع كدة هيبقى اكتر من 400 غرفة!)
+            // توليد من 10 إلى 20 غرفة لكل فندق
             $roomCount = rand(10, 20);
+            $roomIds = [];
             for ($r = 1; $r <= $roomCount; $r++) {
-                DB::table('rooms')->insert([
-                    'room_number' => (string) ($h * 100 + $r),
-                    'price_per_night' => $faker->numberBetween(500, 10000), // أسعار متدرجة من 500 لـ 10,000 ج.م
+                $roomIds[] = DB::table('rooms')->insertGetId([
                     'hotel_id' => $hotelId,
-                    'room_type_id' => $faker->randomElement($typeIds),
+                    'type' => $faker->randomElement($roomTypes),
+                    'price' => $faker->numberBetween(500, 10000),
+                    'capacity' => $faker->numberBetween(1, 6),
+                    'description' => $faker->sentence(8),
+                    'is_available' => $faker->boolean(80), // 80% متاحة
                     'created_at' => now(), 'updated_at' => now(),
                 ]);
+            }
+
+            // ربط الفندق بـ 3-5 خدمات عشوائية لكل غرفة (اختياري بسيط للتجربة)
+            foreach ($roomIds as $roomId) {
+                $randomAmenities = $faker->randomElements($amenityIds, rand(2, 4));
+                foreach ($randomAmenities as $amenityId) {
+                    DB::table('amenity_room')->insert([
+                        'amenity_id' => $amenityId,
+                        'room_id' => $roomId,
+                        'created_at' => now(), 'updated_at' => now(),
+                    ]);
+                }
             }
         }
     }

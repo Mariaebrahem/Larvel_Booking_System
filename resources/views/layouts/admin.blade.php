@@ -6,9 +6,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark px-3">
-        <span class="navbar-brand">لوحة تحكم الإدارة</span>
-    </nav>
+<nav class="navbar navbar-dark bg-dark px-3 d-flex justify-content-between align-items-center">
+    <span class="navbar-brand mb-0">لوحة تحكم الإدارة</span>
+    @auth
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-white">{{ auth()->user()->name }}</span>
+            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                @csrf
+                <button type="submit" class="btn btn-outline-light btn-sm">تسجيل الخروج</button>
+            </form>
+        </div>
+    @endauth
+</nav>
 
     <div class="container mt-4">
         @if(session('success'))
