@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hotel extends Model
 {
-    protected $fillable = ['name', 'address', 'city_id', 'rating'];
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = ['city_id', 'name', 'description', 'address', 'rating'];
 
     public function city()
     {
@@ -16,10 +20,5 @@ class Hotel extends Model
     public function rooms()
     {
         return $this->hasMany(Room::class);
-    }
-
-    public function roomTypes()
-    {
-        return $this->hasMany(RoomType::class);
     }
 }

@@ -1,28 +1,21 @@
 <?php
-
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Room extends Model
 {
-    protected $fillable = ['room_number', 'room_type_id', 'hotel_id' ,'price_per_night'];
-
-    public function roomType()
-    {
-        return $this->belongsTo(RoomType::class);
-    }
-
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'hotel_id', 'type', 'price', 'capacity', 'image', 'description', 'is_available'
+    ];
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
     }
-    public function amenities()
+
+    public function bookings()
     {
-        return $this->belongsToMany(Amenity::class);
-    }
-    public function images()
-    {
-        return $this->hasMany(RoomImage::class);
+        return $this->hasMany(Booking::class);
     }
 }
