@@ -45,7 +45,7 @@ class BookingController extends Controller
         $nights = \Carbon\Carbon::parse($request->check_in_date)
             ->diffInDays(\Carbon\Carbon::parse($request->check_out_date));
 
-        $totalPrice = $nights * $room->price_per_night;
+        $totalPrice = $nights * $room->price;
 
         Booking::create([
             'room_id' => $room->id,

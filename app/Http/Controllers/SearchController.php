@@ -9,7 +9,7 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        $query = Room::with(['hotel.city', 'roomType', 'images']);
+        $query = Room::with(['hotel.city']);
 
         // فلترة بالمدينة
         if ($request->filled('city')) {
@@ -20,10 +20,10 @@ class SearchController extends Controller
 
         // فلترة بالسعر (من - إلى)
         if ($request->filled('min_price')) {
-            $query->where('price_per_night', '>=', $request->min_price);
+            $query->where('price', '>=', $request->min_price);
         }
         if ($request->filled('max_price')) {
-            $query->where('price_per_night', '<=', $request->max_price);
+            $query->where('price', '<=', $request->max_price);
         }
 
         // فلترة بالتقييم (تقييم الفندق)
