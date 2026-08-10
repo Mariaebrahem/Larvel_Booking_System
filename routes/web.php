@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AuthController;
 
 // Redirect root to admin dashboard
 Route::get('/', function () {
