@@ -20,12 +20,16 @@ class ReviewSeeder extends Seeder
         }
 
         foreach ($hotels as $hotel) {
-            for ($i = 0; $i < 3; $i++) {
+            // Pick 3 distinct random users so we never violate the
+            // unique (user_id, hotel_id) constraint on reviews
+            $randomUsers = $users->random(min(3, $users->count()));
+
+            foreach ($randomUsers as $index => $user) {
                 Review::create([
-                    'user_id' => $users->random()->id,
+                    'user_id' => $user->id,
                     'hotel_id' => $hotel->id,
                     'rating' => rand(1, 5),
-                    'comment' => 'Sample review comment number ' . ($i + 1),
+                    'comment' => 'Sample review comment number ' . ($index + 1),
                 ]);
             }
         }
