@@ -7,26 +7,47 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 
+// Redirect root to admin dashboard
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin/dashboard');
 });
 
-// صفحة تسجيل الدخول (GET - بتظهر في المتصفح)
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Admin Frontend Routes
+Route::prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return redirect('/admin/dashboard');
+    });
+    
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 
-// استقبال بيانات تسجيل الدخول (POST)
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::get('/cities', function () {
+        return view('admin.cities.index');
+    })->name('admin.cities.index');
 
-// تسجيل حساب جديد وتسجيل الخروج
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/hotels', function () {
+        return view('admin.hotels.index');
+    })->name('admin.hotels.index');
 
-// صفحات الإدارة (محمية - لازم تسجيل دخول)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('cities', CityController::class);
-    Route::resource('hotels', HotelController::class);
-    Route::resource('rooms', RoomController::class);
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/rooms', function () {
+        return view('admin.rooms.index');
+    })->name('admin.rooms.index');
+
+    Route::get('/room-types', function () {
+        return view('admin.roomTypes.index');
+    })->name('admin.room-types.index');
+
+    Route::get('/amenities', function () {
+        return view('admin.amenities.index');
+    })->name('admin.amenities.index');
+
+    Route::get('/bookings', function () {
+        return view('admin.bookings.index');
+    })->name('admin.bookings.index');
+
+    Route::get('/reports', function () {
+        return view('admin.reports.index');
+    })->name('admin.reports.index');
 });
+
