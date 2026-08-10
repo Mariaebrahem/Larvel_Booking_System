@@ -20,6 +20,16 @@ class BookingController extends Controller
         return view('bookings.index', compact('bookings'));
     }
 
+    // Show all bookings for admin
+    public function adminIndex()
+    {
+        $bookings = Booking::with(['user', 'room.hotel'])
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.bookings.index', compact('bookings'));
+    }
+
     // Create a new booking
     public function store(StoreBookingRequest $request)
     {
@@ -67,7 +77,12 @@ class BookingController extends Controller
             return back()->with('error', 'This room is currently unavailable.');
         }
 
-        if ($this->hasConflict($request->room_id, $request->check_in_date, $request->check_out_date, $booking->id)) {
+        if ($this->hasConflict(
+            $request->room_id,
+            $request->check_in_date,
+            $request->check_out_date,
+            $booking->id
+        )) {
             return back()->with('error', 'This room is not available for the selected dates.');
         }
 
@@ -115,7 +130,12 @@ class BookingController extends Controller
             return back()->with('error', 'Cannot approve: this room is currently unavailable.');
         }
 
-        if ($this->hasConflict($booking->room_id, $booking->check_in_date, $booking->check_out_date, $booking->id)) {
+        if ($this->hasConflict(
+            $booking->room_id,
+            $booking->check_in_date,
+            $booking->check_out_date,
+            $booking->id
+        )) {
             return back()->with('error', 'Cannot approve: this room now conflicts with another approved booking.');
         }
 

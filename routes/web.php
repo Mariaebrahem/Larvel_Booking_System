@@ -14,42 +14,90 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// صفحة تسجيل الدخول (GET - بتظهر في المتصفح)
+// صفحة تسجيل الدخول
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-// استقبال بيانات تسجيل الدخول (POST)
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+// استقبال بيانات تسجيل الدخول
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login.submit');
 
 // تسجيل حساب جديد وتسجيل الخروج
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('register');
 
-// صفحات الإدارة (محمية - لازم تسجيل دخول)
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
+
+// Admin Routes - محمية بـ auth + admin
+
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('cities', CityController::class);
-    Route::resource('hotels', HotelController::class);
-    Route::resource('rooms', RoomController::class);
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-    // Booking - Admin only actions
-    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
-    Route::post('/bookings/{id}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
-    Route::post('/bookings/{id}/check-in', [BookingController::class, 'checkIn'])->name('bookings.checkIn');
-    Route::post('/bookings/{id}/check-out', [BookingController::class, 'checkOut'])->name('bookings.checkOut');
+    // Cities
+    Route::resource('cities', CityController::class);
+
+    // Hotels
+    Route::resource('hotels', HotelController::class);
+
+    // Rooms
+    Route::resource('rooms', RoomController::class);
+
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])
+        ->name('reports.index');
+
+
+    // Admin Bookings
+
+    // عرض جميع الحجوزات للـ Admin
+    Route::get('/admin/bookings', [BookingController::class, 'adminIndex'])
+        ->name('admin.bookings.index');
+
+    // قبول الحجز
+    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])
+        ->name('bookings.approve');
+
+    // رفض الحجز
+    Route::post('/bookings/{id}/reject', [BookingController::class, 'reject'])
+        ->name('bookings.reject');
+
+    // Check In
+    Route::post('/bookings/{id}/check-in', [BookingController::class, 'checkIn'])
+        ->name('bookings.checkIn');
+
+    // Check Out
+    Route::post('/bookings/{id}/check-out', [BookingController::class, 'checkOut'])
+        ->name('bookings.checkOut');
 });
+
+
+// User Routes 
 
 Route::middleware('auth')->group(function () {
-    // Booking - regular user
-    Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-    Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookings.update');
-    Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
-    // Review
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    // مشاهدة حجوزات المستخدم
+    Route::get('/my-bookings', [BookingController::class, 'index'])
+        ->name('bookings.index');
+
+    // إنشاء حجز
+    Route::post('/bookings', [BookingController::class, 'store'])
+        ->name('bookings.store');
+
+    // تعديل حجز
+    Route::put('/bookings/{id}', [BookingController::class, 'update'])
+        ->name('bookings.update');
+
+    // إلغاء حجز
+    Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])
+        ->name('bookings.cancel');
+
+    // Reviews
+
+    Route::post('/reviews', [ReviewController::class, 'store'])
+        ->name('reviews.store');
 });
 
-// Search - متاح للجميع من غير تسجيل دخول
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+// Search - متاح للجميع بدون Login
+Route::get('/search', [SearchController::class, 'search'])
+    ->name('search');
