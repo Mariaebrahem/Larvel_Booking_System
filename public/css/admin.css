@@ -522,3 +522,22 @@ body {
         margin-left: 0;
     }
 }
+
+/* Pagination Fix */
+.pagination svg, nav[aria-label="Pagination Navigation"] svg, nav svg {
+    width: 1rem !important;
+    height: 1rem !important;
+    max-width: 1rem !important;
+    max-height: 1rem !important;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+
+.pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
