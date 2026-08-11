@@ -25,7 +25,10 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json(['message' => 'User registered and logged in.', 'user' => $user ,201]);
+        return redirect('/hotels')->with(
+            'success',
+            'تم إنشاء الحساب وتسجيل الدخول بنجاح'
+        );
     }
 
     public function login(Request $request)
@@ -37,11 +40,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/cities');
-        }
- 
-        return response()->json(['message' => 'The provided credentials do not match our records.'], 401);
 
+            if (Auth::user()->role === 'admin') {
+                return redirect('/admin/hotels');
+            }
+
+            return redirect('/hotels');
+        }
+
+        return response()->json([
+            'message' => 'The provided credentials do not match our records.'
+        ], 401);
     }
 
     public function logout()
