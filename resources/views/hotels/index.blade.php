@@ -225,7 +225,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/1') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/1') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('قصر النيل بوتيك')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/2') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/2') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('منتجع الروز والرمال')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
@@ -279,7 +279,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/3') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/3') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('فندق رويال أسوان')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
@@ -306,7 +306,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/4') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/4') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('أجنحة الجونة الفاخرة')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
@@ -333,7 +333,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/5') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/5') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('منتجع دهب الهادئ')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
@@ -360,7 +360,7 @@
                         </div>
                     </div>
                     <div class="pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-                        <a href="{{ url('/hotels/6') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <a href="{{ url('/hotels/details/6') }}" class="btn btn-outline-rose rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
                         <button onclick="bookNow('فندق مراسي بلازا')" class="btn btn-rose rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
