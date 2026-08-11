@@ -1,223 +1,205 @@
 @extends('layouts.user')
 
-@section('title', 'استكشف أفخم الفنادق')
+@section('title', 'استكشف أفضل الفنادق')
 
 @push('styles')
 <style>
-    .hero-section {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        border-radius: 20px;
-        color: white;
-        padding: 40px 20px;
-        margin-bottom: 40px;
-        box-shadow: 0 10px 30px rgba(30, 60, 114, 0.2);
-    }
     .hotel-card {
-        border: none;
-        border-radius: 16px;
-        overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        background: #fff;
+        border: none;
     }
     .hotel-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.12) !important;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.12) !important;
     }
     .hotel-img-wrapper {
         position: relative;
-        height: 220px;
         overflow: hidden;
+        height: 220px;
     }
     .hotel-img-wrapper img {
+        object-fit: cover;
         width: 100%;
         height: 100%;
-        object-fit: cover;
         transition: transform 0.5s ease;
     }
     .hotel-card:hover .hotel-img-wrapper img {
         transform: scale(1.08);
     }
-    .badge-rating {
+    .badge-price {
         position: absolute;
         top: 15px;
         left: 15px;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(13, 110, 253, 0.9);
         backdrop-filter: blur(4px);
-        color: #2b2b2b;
-        font-weight: bold;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
     }
-    .btn-custom {
-        border-radius: 10px;
-        font-weight: 600;
-        padding: 10px 20px;
+    .hero-search {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        border-radius: 20px;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="container my-3">
+<div class="container my-4">
     <!-- Hero & Search Section -->
-    <div class="hero-section text-center position-relative overflow-hidden">
-        <h1 class="fw-bold mb-3">اعثر على إقامتك المثالية 🏨</h1>
-        <p class="lead opacity-75 mb-4">احجز أفضل الفنادق بأفضل الأسعار وأعلى جودة للخدمات</p>
-        
-        <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <form action="{{ url('/hotels') }}" method="GET" class="bg-white p-2 rounded-4 shadow-lg">
-                    <div class="row g-2 align-items-center">
-                        <div class="col-md-8">
-                            <div class="input-group input-group-lg border-0">
-                                <span class="input-group-text bg-transparent border-0 text-muted">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </span>
-                                <input type="text" name="search" class="form-control border-0 fs-6 shadow-none" placeholder="ابحث باسم الفندق، المدينة، أو المنطقة..." value="{{ request('search') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary btn-lg w-100 btn-custom shadow-sm">
-                                <i class="fa-solid fa-magnifying-glass me-2"></i> بحث الآن
-                            </button>
-                        </div>
-                    </div>
-                </form>
+    <div class="hero-search text-white p-4 p-md-5 mb-5 shadow">
+        <div class="row align-items-center mb-4">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-2">ابحث عن إقامتك القادمة</h2>
+                <p class="text-white-50 mb-0">اعثر على أفضل الفنادق والمنتجعات بأفضل الأسعار المتاحة</p>
             </div>
         </div>
+
+        <!-- Search Form -->
+        <form action="{{ url('/hotels') }}" method="GET" class="bg-white p-3 p-md-4 rounded-4 shadow-sm text-dark">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold small text-muted"><i class="fa-solid fa-location-dot me-1 text-primary"></i> المدينة / الفندق</label>
+                    <input type="text" name="query" class="form-control bg-light" placeholder="القاهرة، شرم الشيخ..." value="{{ request('query') }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold small text-muted"><i class="fa-solid fa-calendar-days me-1 text-primary"></i> تاريخ الوصول</label>
+                    <input type="date" name="check_in" class="form-control bg-light" value="{{ request('check_in') }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold small text-muted"><i class="fa-solid fa-users me-1 text-primary"></i> النزلاء</label>
+                    <select name="guests" class="form-select bg-light">
+                        <option value="1">شخص واحد</option>
+                        <option value="2" selected>شخصين</option>
+                        <option value="4">عائلة (4 أشخاص)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> بحث
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <!-- Section Title -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold mb-1">الفنادق المتاحة</h3>
-            <p class="text-muted small mb-0">اختر من بين مجموعة مميزة من الفنادق والمنتجعات</p>
-        </div>
-        <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2 rounded-pill">عروض حصرية</span>
-    </div>
-
-    @php
-        // بيانات تجريبية احترافية في حال عدم وجود فنادق بالداتابيز لتجربة الديزاين
-        $demoHotels = [
-            [
-                'name' => 'فندق الفورسيزونز القاهرة',
-                'location' => 'القاهرة، جاردن سيتي',
-                'price' => '3,500',
-                'rating' => '4.9 ★',
-                'image' => 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
-                'description' => 'إطلالة ساحرة على النيل مباشرة مع خدمات 5 نجوم وفاخرة وشاملة الإفطار.'
-            ],
-            [
-                'name' => 'منتجع ريكسوس شرم الشيخ',
-                'location' => 'شرم الشيخ، خليج نبق',
-                'price' => '4,200',
-                'rating' => '4.8 ★',
-                'image' => 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80',
-                'description' => 'إقامة شاطئية فائقة الفخامة مع ألعاب مائية ومطاعم عالمية متنوعة.'
-            ],
-            [
-                'name' => 'فندق شتيجنبرجر الجونة',
-                'location' => 'الغردقة، الجونة',
-                'price' => '2,800',
-                'rating' => '4.7 ★',
-                'image' => 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-                'description' => 'هدوء تام، إطلالة على البحيرات الصناعية وملعب جولف متكامل.'
-            ],
-            [
-                'name' => 'فندق هلنان فلسطين',
-                'location' => 'الأسكندرية، المنتزه',
-                'price' => '2,100',
-                'rating' => '4.6 ★',
-                'image' => 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
-                'description' => 'إقامة مميزة داخل حدائق المنتزه مع شاطئ خاص وتراس بانورامي.'
-            ],
-            [
-                'name' => 'منتجع موفنبيك أسوان',
-                'location' => 'أسوان، جزيرة الفنتين',
-                'price' => '1,950',
-                'rating' => '4.8 ★',
-                'image' => 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80',
-                'description' => 'استمتع بسحر النيل والطبيعة الخلابة وسط صعيد مصر العريق.'
-            ],
-            [
-                'name' => 'فندق وأجنحة الماسة',
-                'location' => 'العاصمة الإدارية الجديدة',
-                'price' => '3,100',
-                'rating' => '4.9 ★',
-                'image' => 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80',
-                'description' => 'تصميم عصري راقٍ وخدمات رجال الأعمال والمؤتمرات على أعلى مستوى.'
-            ]
-        ];
-
-        $displayHotels = (isset($hotels) && count($hotels) > 0) ? $hotels : $demoHotels;
-    @endphp
 
     <!-- Hotels Grid -->
-    <div class="row g-4">
-        @foreach($displayHotels as $hotel)
-            @php
-                $name = is_array($hotel) ? $hotel['name'] : $hotel->name;
-                $location = is_array($hotel) ? $hotel['location'] : $hotel->location;
-                $price = is_array($hotel) ? $hotel['price'] : ($hotel->price_per_night ?? '1500');
-                $rating = is_array($hotel) ? $hotel['rating'] : '4.8 ★';
-                $image = is_array($hotel) ? $hotel['image'] : ($hotel->image_url ?? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80');
-                $description = is_array($hotel) ? $hotel['description'] : ($hotel->description ?? 'استمتع بإقامة مميزة مع أرقى الخدمات المتاحة للنزلاء.');
-            @endphp
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card hotel-card shadow-sm h-100">
-                    <div class="hotel-img-wrapper">
-                        <img src="{{ $image }}" alt="{{ $name }}">
-                        <span class="badge-rating"><i class="fa-solid fa-star text-warning me-1"></i> {{ $rating }}</span>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="fw-bold text-dark mb-1">{{ $name }}</h5>
-                        <p class="text-muted small mb-3">
-                            <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ $location }}
-                        </p>
-                        <p class="text-secondary small flex-grow-1 lh-base">
-                            {{ Str::limit($description, 95) }}
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center pt-3 mt-3 border-top">
-                            <div>
-                                <span class="text-muted small d-block">السعر يبدأ من</span>
-                                <span class="fw-bold text-primary fs-5">{{ $price }} <small class="fs-6 font-monospace">ج.م</small> / ليلة</span>
-                            </div>
-                            <button onclick="confirmBooking('{{ $name }}')" class="btn btn-outline-primary btn-custom shadow-none">
-                                حجز الآن
-                            </button>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-hotel text-primary me-2"></i>الفنادق المتاحة</h4>
+        <span class="text-muted small">عرض 1 - 3 من أصل 12 فندق</span>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Hotel 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card hotel-card h-100 shadow-sm rounded-4 overflow-hidden">
+                <div class="hotel-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80" alt="فندق النيل الفاخر">
+                    <span class="badge badge-price text-white px-3 py-2 rounded-pill fw-bold">120$ / ليلة</span>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">فندق النيل الفاخر</h5>
+                            <div class="text-warning small"><i class="fa-solid fa-star"></i> 4.9</div>
                         </div>
+                        <p class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1 text-danger"></i> القاهرة، وسط البلد</p>
+                        <div class="d-flex gap-2 mb-3">
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-wifi"></i> واي فاي</span>
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-water-ladder"></i> حمام سباحة</span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                        <a href="{{ url('/hotels/1') }}" class="btn btn-outline-primary rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <button onclick="bookNow('فندق النيل الفاخر')" class="btn btn-primary rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
                     </div>
                 </div>
             </div>
-        @endforeach
+        </div>
+
+        <!-- Hotel 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card hotel-card h-100 shadow-sm rounded-4 overflow-hidden">
+                <div class="hotel-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80" alt="منتجع البحر الأحمر">
+                    <span class="badge badge-price text-white px-3 py-2 rounded-pill fw-bold">200$ / ليلة</span>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">منتجع البحر الأحمر</h5>
+                            <div class="text-warning small"><i class="fa-solid fa-star"></i> 4.8</div>
+                        </div>
+                        <p class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1 text-danger"></i> شرم الشيخ، خليج نعمة</p>
+                        <div class="d-flex gap-2 mb-3">
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-umbrella-beach"></i> شاطئ خاص</span>
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-utensils"></i> أفطار مجاني</span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                        <a href="{{ url('/hotels/2') }}" class="btn btn-outline-primary rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <button onclick="bookNow('منتجع البحر الأحمر')" class="btn btn-primary rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotel 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card hotel-card h-100 shadow-sm rounded-4 overflow-hidden">
+                <div class="hotel-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80" alt="فندق جراند أسوان">
+                    <span class="badge badge-price text-white px-3 py-2 rounded-pill fw-bold">90$ / ليلة</span>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">فندق جراند أسوان</h5>
+                            <div class="text-warning small"><i class="fa-solid fa-star"></i> 4.6</div>
+                        </div>
+                        <p class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1 text-danger"></i> أسوان، كورنيش النيل</p>
+                        <div class="d-flex gap-2 mb-3">
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-square-parking"></i> جراج مجاني</span>
+                            <span class="badge bg-light text-secondary rounded-pill px-2 py-1"><i class="fa-solid fa-spa"></i> سبا</span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                        <a href="{{ url('/hotels/3') }}" class="btn btn-outline-primary rounded-3 w-100 me-2 fw-bold">عرض التفاصيل</a>
+                        <button onclick="bookNow('فندق جراند أسوان')" class="btn btn-primary rounded-3 text-nowrap fw-bold px-3">حجز سريع</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Functional Pagination UI -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled"><a class="page-link rounded-circle mx-1" href="#"><i class="fa-solid fa-chevron-right"></i></a></li>
+            <li class="page-item active"><a class="page-link rounded-circle mx-1" href="#">1</a></li>
+            <li class="page-item"><a class="page-link rounded-circle mx-1" href="#">2</a></li>
+            <li class="page-item"><a class="page-link rounded-circle mx-1" href="#">3</a></li>
+            <li class="page-item"><a class="page-link rounded-circle mx-1" href="#"><i class="fa-solid fa-chevron-left"></i></a></li>
+        </ul>
+    </nav>
 </div>
 @endsection
 
 @push('scripts')
 <script>
-    function confirmBooking(hotelName) {
+    function bookNow(hotelName) {
         Swal.fire({
-            title: 'تأكيد طلب الحجز',
-            html: `هل ترغب في البدء في إجراءات حجز <b>${hotelName}</b>؟`,
+            title: 'تأكيد الحجز المبدئي',
+            text: 'هل ترغب في تأكيد طلب الحجز لـ ' + hotelName + '؟',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#1e3c72',
+            confirmButtonColor: '#0d6efd',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: '<i class="fa-solid fa-check me-1"></i> نعم، تابع',
-            cancelButtonText: 'إلغاء',
-            customClass: {
-                popup: 'rounded-4'
-            }
+            confirmButtonText: 'نعم، حجز الآن',
+            cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'رائع!',
-                    text: 'جاري تحويلك لصفحة إدخال البيانات والتأكيد...',
+                    title: 'تم إرسال طلب الحجز!',
+                    text: 'سيتم التواصل معك لتأكيد تفاصيل الحجز.',
                     icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: false
+                    confirmButtonColor: '#0d6efd'
                 });
             }
         });

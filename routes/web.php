@@ -54,3 +54,12 @@ Route::get('/', function () {
 Route::get('/hotels', function () {
     return view('hotels.index');
 });
+// صفحة قائمة الفنادق
+Route::get('/hotels', function () {
+    return view('hotels.index');
+});
+
+// صفحة تفاصيل الفندق (Hotel Details View)
+Route::get('/hotels/{id}', function ($id) {
+    return view('hotels.show');
+});
