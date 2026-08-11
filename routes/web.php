@@ -46,3 +46,8 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/', function () {
     return view('welcome');
 });
+
+// اختبار الـ Layout الخاص بالمستخدم
+Route::get('/test-home', function () {
+    return view('test-home');
+});
