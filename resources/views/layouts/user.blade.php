@@ -3,58 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'نظام الحجوزات')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>@yield('title', 'نظام حجز الفنادق')</title>
+    
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     @stack('styles')
 </head>
-<body>
+<body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">نظام الحجوزات</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto gap-2">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/') }}">الرئيسية</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">بحث عن فنادق</a>
-                </li>
-                @auth
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-link navbar-brand fw-bold" href="#">فنادقنا</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <span class="nav-link text-white">{{ auth()->user()->name }}</span>
+                        <a class="nav-link active" href="{{ url('/hotels') }}">الرئيسية (البحث)</a>
                     </li>
                     <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-light btn-sm">تسجيل خروج</button>
-                        </form>
+                        <a class="nav-link" href="{{ url('/register') }}">إنشاء حساب</a>
                     </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">تسجيل دخول</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">إنشاء حساب</a>
-                    </li>
-                @endauth
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container mt-4">
-    @yield('content')
-</div>
+    <!-- Content -->
+    <main class="py-4">
+        @yield('content')
+    </main>
 
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <p class="mb-0">جميع الحقوق محفوظة &copy; {{ date('Y') }}</p>
-</footer>
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">&copy; {{ date('Y') }} جميع الحقوق محفوظة - نظام حجز الفنادق</p>
+        </div>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-@stack('scripts')
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @stack('scripts')
 </body>
 </html>

@@ -10,10 +10,14 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 
-// صفحة تسجيل الدخول
+// صفحة تسجيل الدخول والتسجيل
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register.show');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -47,7 +51,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// اختبار الـ Layout الخاص بالمستخدم
-Route::get('/test-home', function () {
-    return view('test-home');
+Route::get('/hotels', function () {
+    return view('hotels.index');
 });
