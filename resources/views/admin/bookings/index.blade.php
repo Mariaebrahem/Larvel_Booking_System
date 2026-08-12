@@ -15,51 +15,53 @@
             <h2 class="h4 fw-bold text-dark mb-1">Bookings & Reservations</h2>
             <p class="text-muted mb-0 small">Monitor reservation activity, process guest check-ins, and manage status approvals.</p>
         </div>
-        <button class="btn btn-secondary-light" onclick="showToast('Export Data', 'Bookings exported to CSV', 'info')">
-            <i data-lucide="download" style="width: 15px; height: 15px;"></i> Export Data
-        </button>
     </div>
 
     <hr class="my-4 text-secondary opacity-25">
 
     <!-- Filter Card -->
     <div class="card-custom p-3 mb-4">
-        <div class="row g-3 align-items-center">
-            <div class="col-12 col-md-4 col-lg-3">
-                <div class="search-input-group w-100">
-                    <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                    {{-- BACKEND TODO: Connect search input to query booking ID or guest name in database --}}
-                    <input type="text" class="form-control" placeholder="Search Guest or Booking ID..." data-table-search="bookingsTable">
+        <form method="GET" action="{{ route('admin.bookings.index') }}">
+            <div class="row g-3 align-items-center">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="search-input-group w-100">
+                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                        <input type="text" name="search" class="form-control" placeholder="Search Guest or Booking ID..." value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <select name="status" class="form-select" onchange="this.form.submit()">
+                        <option value="all">All Statuses</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                        <option value="checked_in" {{ request('status') == 'checked_in' ? 'selected' : '' }}>Checked In</option>
+                        <option value="checked_out" {{ request('status') == 'checked_out' ? 'selected' : '' }}>Checked Out</option>
+                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <select name="hotel_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Hotels</option>
+                        @foreach ($hotels as $hotel)
+                            <option value="{{ $hotel->id }}" {{ request('hotel_id') == $hotel->id ? 'selected' : '' }}>
+                                {{ $hotel->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary-light btn-sm">Filter</button>
+                    @if(request('search') || request('status') || request('hotel_id'))
+                        <a href="{{ route('admin.bookings.index') }}" class="btn btn-link text-decoration-none btn-sm">Reset</a>
+                    @endif
+                </div>
+                <div class="col-12 col-md-2 ms-auto text-end">
+                    <span class="text-muted small">
+                        Total: <strong class="text-dark">{{ $bookings->total() }}</strong>
+                    </span>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-2">
-                {{-- BACKEND TODO: Filter bookings by status (pending, confirmed, checked-in, checked-out, rejected, cancelled) --}}
-                <select class="form-select" data-table-filter="status" data-table-target="bookingsTable">
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="checked-in">Checked In</option>
-                    <option value="checked-out">Checked Out</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                {{-- BACKEND TODO: Populate select options with hotels from database --}}
-                <select class="form-select" id="hotelFilter">
-                    <option value="">All Hotels</option>
-                    {{-- BACKEND TODO: `@foreach ($hotels as $hotel)` --}}
-                </select>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                {{-- BACKEND TODO: Filter bookings by date range --}}
-                <div class="input-group">
-                    <input type="date" class="form-control" id="startDateFilter">
-                    <span class="input-group-text bg-light text-muted border-0">to</span>
-                    <input type="date" class="form-control" id="endDateFilter">
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 
     <hr class="my-4 text-secondary opacity-25">
@@ -76,83 +78,74 @@
                         <th>Room</th>
                         <th>Check-In</th>
                         <th>Check-Out</th>
-                        <th>Guests</th>
                         <th>Total Price</th>
                         <th>Status</th>
                         <th class="text-end" style="min-width: 170px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- BACKEND TODO:
-                         Populate this table with real booking records from Laravel.
-                         Replace this empty state row with `@foreach ($bookings as $booking)`.
-                         The backend should provide:
-                         - Booking ID (#BK-XXXX)
-                         - Guest Name & Email
-                         - Hotel Name
-                         - Room Number & Category
-                         - Check-in Date
-                         - Check-out Date
-                         - Guests Count
-                         - Total Price ($)
-                         - Booking Status (Pending, Confirmed, Checked In, Checked Out, Rejected, Cancelled)
-                    --}}
-                    <tr>
-                        <td colspan="10" class="text-center py-4 text-muted">
-                            <div class="py-2">
-                                <i data-lucide="calendar-check" style="width: 28px; height: 28px;" class="mb-2 opacity-50"></i>
-                                <p class="mb-0 small fw-semibold">No bookings available</p>
-                                <span class="small text-secondary">Guest reservation records will appear here once retrieved from the database.</span>
-                            </div>
-                        </td>
-                    </tr>
+                    @forelse ($bookings as $booking)
+                        <tr>
+                            <td><strong class="text-dark">#{{ $booking->id }}</strong></td>
+                            <td>
+                                <div class="fw-semibold text-dark">{{ $booking->user->name ?? 'Guest' }}</div>
+                                <small class="text-muted">{{ $booking->user->email ?? '' }}</small>
+                            </td>
+                            <td>{{ $booking->room->hotel->name ?? 'N/A' }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    {{ $booking->room->type ?? 'Room' }}
+                                </span>
+                            </td>
+                            <td><span class="small text-muted">{{ $booking->check_in_date ?? $booking->check_in }}</span></td>
+                            <td><span class="small text-muted">{{ $booking->check_out_date ?? $booking->check_out }}</span></td>
+                            <td><strong class="text-dark">${{ number_format($booking->total_price ?? 0, 2) }}</strong></td>
+                            <td><x-status-badge :status="$booking->status" /></td>
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-1">
+                                    @if ($booking->status === 'pending')
+                                        <form action="{{ route('bookings.approve', $booking->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success px-2 py-1">Approve</button>
+                                        </form>
+                                        <form action="{{ route('bookings.reject', $booking->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger px-2 py-1">Reject</button>
+                                        </form>
+                                    @elseif ($booking->status === 'approved')
+                                        <form action="{{ route('bookings.checkIn', $booking->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-primary px-2 py-1">Check In</button>
+                                        </form>
+                                    @elseif ($booking->status === 'checked_in')
+                                        <form action="{{ route('bookings.checkOut', $booking->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-dark px-2 py-1">Check Out</button>
+                                        </form>
+                                    @else
+                                        <span class="text-muted small">—</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="text-center py-4 text-muted">
+                                <div class="py-2">
+                                    <i data-lucide="calendar-check" style="width: 28px; height: 28px;" class="mb-2 opacity-50"></i>
+                                    <p class="mb-0 small fw-semibold">No bookings available</p>
+                                    <span class="small text-secondary">Guest reservation records will appear here.</span>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-        {{-- BACKEND TODO: Render dynamic pagination links from Laravel controller --}}
-        <x-pagination :total="0" :perPage="10" />
-    </div>
-
-</div>
-
-<!-- Booking Details Modal -->
-<div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold fs-6 mb-0">
-                    Booking Details
-                    {{-- BACKEND TODO: Bind booking ID --}}
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-3 border-0">
-                            <h6 class="fw-bold text-primary mb-2">Guest Information</h6>
-                            {{-- BACKEND TODO: Bind guest details --}}
-                            <p class="mb-1 small"><strong>Name:</strong> <span id="modalGuestName">—</span></p>
-                            <p class="mb-1 small"><strong>Email:</strong> <span id="modalGuestEmail">—</span></p>
-                            <p class="mb-0 small"><strong>Phone:</strong> <span id="modalGuestPhone">—</span></p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="p-3 bg-light rounded-3 border-0">
-                            <h6 class="fw-bold text-primary mb-2">Reservation Details</h6>
-                            {{-- BACKEND TODO: Bind reservation details --}}
-                            <p class="mb-1 small"><strong>Hotel:</strong> <span id="modalHotelName">—</span></p>
-                            <p class="mb-1 small"><strong>Room:</strong> <span id="modalRoomNumber">—</span></p>
-                            <p class="mb-0 small"><strong>Dates:</strong> <span id="modalDates">—</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary-light" data-bs-dismiss="modal">Close</button>
-                {{-- BACKEND TODO: Connect booking action buttons to controller endpoints (accept, reject, check-in, check-out) --}}
-            </div>
+        <div class="p-3 border-top">
+            {{ $bookings->links() }}
         </div>
     </div>
+
 </div>
 @endsection

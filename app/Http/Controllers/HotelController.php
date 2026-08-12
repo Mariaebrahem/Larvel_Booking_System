@@ -102,13 +102,26 @@ class HotelController extends Controller
     // Admin Hotels
     // =========================
 
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = Hotel::with('city')
-            ->latest()
-            ->paginate(10);
+        $query = Hotel::with('city')->withCount('rooms');
 
-        return view('admin.hotels.index', compact('hotels'));
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        $hotels = $query->latest()->paginate(10)->withQueryString();
+        $cities = City::all();
+
+        return view('admin.hotels.index', compact('hotels', 'cities'));
     }
 
     public function create()

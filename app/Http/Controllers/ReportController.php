@@ -10,9 +10,13 @@ class ReportController extends Controller
 {
     public function index()
     {
+        $totalBookings = Booking::count();
+
         // إجمالي الإيرادات (من الحجوزات المؤكدة/المكتملة بس)
         $totalRevenue = Booking::whereIn('status', ['approved', 'checked_in', 'checked_out'])
             ->sum('total_price');
+
+        $avgBookingValue = Booking::whereIn('status', ['approved', 'checked_in', 'checked_out'])->avg('total_price') ?? 0;
 
         // إيرادات الشهر الحالي
         $monthlyRevenue = Booking::whereIn('status', ['approved', 'checked_in', 'checked_out'])
@@ -40,12 +44,19 @@ class ReportController extends Controller
             ->groupBy('status')
             ->pluck('total', 'status');
 
+        $cities = \App\Models\City::all();
+        $hotels = Hotel::all();
+
         return view('admin.reports.index', compact(
+            'totalBookings',
             'totalRevenue',
+            'avgBookingValue',
             'monthlyRevenue',
             'topHotels',
             'topRooms',
-            'bookingsByStatus'
+            'bookingsByStatus',
+            'cities',
+            'hotels'
         ));
     }
 }

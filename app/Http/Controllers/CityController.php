@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 class CityController extends Controller
 {
     // عرض كل المدن
-    public function index()
+    public function index(Request $request)
     {
-        $cities = City::latest()->paginate(10);
+        $query = City::withCount('hotels');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $cities = $query->latest()->paginate(10)->withQueryString();
         return view('admin.cities.index', compact('cities'));
     }
 

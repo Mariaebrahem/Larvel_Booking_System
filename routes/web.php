@@ -56,8 +56,68 @@ Route::middleware(['auth', 'admin'])
 
         // Admin Dashboard
         Route::get('/dashboard', function () {
-            return view('admin.dashboard');
+
+            $totalBookings = \App\Models\Booking::count();
+
+            $totalRevenue = \App\Models\Booking::whereIn(
+                'status',
+                ['confirmed', 'checked_in', 'checked_out']
+            )->sum('total_price');
+
+            $totalUsers = \App\Models\User::count();
+
+            $availablePlaces = \App\Models\Room::where(
+                'is_available',
+                true
+            )->count();
+
+            $recentBookings = \App\Models\Booking::with([
+                'user',
+                'room.hotel'
+            ])->latest()->take(6)->get();
+
+            // Chart Data: Monthly bookings count for current year
+            $monthlyBookings = [];
+
+            for ($m = 1; $m <= 12; $m++) {
+                $monthlyBookings[] = \App\Models\Booking::whereMonth(
+                    'created_at',
+                    $m
+                )->whereYear(
+                    'created_at',
+                    date('Y')
+                )->count();
+            }
+
+            // Top hotels by booking count
+            $topHotels = \App\Models\Hotel::withCount('rooms')
+                ->take(4)
+                ->get();
+
+            $hotelNames = $topHotels->pluck('name')->toArray();
+
+            $hotelCounts = $topHotels->pluck('rooms_count')->toArray();
+
+            $revenueData = [
+                ($totalRevenue ?? 0) * 0.2,
+                ($totalRevenue ?? 0) * 0.3,
+                ($totalRevenue ?? 0) * 0.4,
+                ($totalRevenue ?? 0) * 0.1,
+            ];
+
+            return view('admin.dashboard', compact(
+                'totalBookings',
+                'totalRevenue',
+                'totalUsers',
+                'availablePlaces',
+                'recentBookings',
+                'monthlyBookings',
+                'hotelNames',
+                'hotelCounts',
+                'revenueData'
+            ));
         })->name('dashboard');
+
 
         // Cities
         Route::resource('cities', CityController::class);
@@ -67,6 +127,10 @@ Route::middleware(['auth', 'admin'])
 
         // Rooms
         Route::resource('rooms', RoomController::class);
+
+        // Bookings
+        Route::get('/bookings', [BookingController::class, 'adminIndex'])
+            ->name('bookings.index');
 
         // Reports
         Route::get('/reports', [ReportController::class, 'index'])

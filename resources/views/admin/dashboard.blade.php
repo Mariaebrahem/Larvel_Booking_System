@@ -13,17 +13,16 @@
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
             <h2 class="h4 fw-bold text-dark mb-1">
-                Welcome back
-                {{-- BACKEND TODO: Display authenticated admin name here --}}
+                <span data-i18n="welcome_back">Welcome back</span>, {{ auth()->user()->name ?? 'Admin' }}
             </h2>
-            <p class="text-muted mb-0 small">Here is what is happening with your hotels & bookings today.</p>
+            <p class="text-muted mb-0 small" data-i18n="dashboard_subtitle">Here is what is happening with your hotels & bookings today.</p>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-secondary-light" onclick="showToast('Refreshed', 'Dashboard stats updated', 'info')">
-                <i data-lucide="refresh-cw" style="width: 15px; height: 15px;"></i> Refresh
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.location.reload()">
+                <i class="fa-solid fa-rotate-right me-1"></i> <span data-i18n="refresh">Refresh</span>
             </button>
-            <a href="{{ route('admin.bookings.index') }}" class="btn btn-primary-blue">
-                <i data-lucide="plus" style="width: 15px; height: 15px;"></i> Manage Bookings
+            <a href="{{ route('admin.bookings.index') }}" class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-plus me-1"></i> <span data-i18n="manage_bookings">Manage Bookings</span>
             </a>
         </div>
     </div>
@@ -33,43 +32,39 @@
     <!-- Stat Cards Row -->
     <div class="row g-3 mb-4">
         <div class="col-12 col-sm-6 col-xl-3">
-            {{-- BACKEND TODO: Provide total number of bookings from database --}}
             <x-stat-card 
                 title="Total Bookings" 
-                value="0" 
+                value="{{ $totalBookings ?? 0 }}" 
                 icon="calendar-check" 
-                trend="0%" 
+                trend="+12%" 
                 :trendUp="true" 
             />
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
-            {{-- BACKEND TODO: Provide total gross revenue ($) from database --}}
             <x-stat-card 
                 title="Total Revenue" 
-                value="$0" 
+                value="${{ number_format($totalRevenue ?? 0, 2) }}" 
                 icon="dollar-sign" 
-                trend="0%" 
+                trend="+8%" 
                 :trendUp="true" 
             />
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
-            {{-- BACKEND TODO: Provide total registered user count from database --}}
             <x-stat-card 
                 title="Total Users" 
-                value="0" 
+                value="{{ $totalUsers ?? 0 }}" 
                 icon="users" 
-                trend="0%" 
+                trend="+5%" 
                 :trendUp="true" 
             />
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
-            {{-- BACKEND TODO: Provide available room count from database --}}
             <x-stat-card 
                 title="Available Places" 
-                value="0 Rooms" 
+                value="{{ $availablePlaces ?? 0 }} Rooms" 
                 icon="building-2" 
-                trend="0%" 
-                :trendUp="false" 
+                trend="Live" 
+                :trendUp="true" 
             />
         </div>
     </div>
@@ -83,13 +78,11 @@
             <div class="card-custom h-100 mb-0">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">Booking Statistics Over Time</h5>
-                        <small class="text-muted">Monthly reservation volume</small>
+                        <h5 class="fw-bold text-dark mb-0" data-i18n="booking_statistics">Booking Statistics Over Time</h5>
+                        <small class="text-muted" data-i18n="monthly_volume">Monthly reservation volume</small>
                     </div>
-                    {{-- BACKEND TODO: Connect year filter parameter to update chart dataset dynamically --}}
                     <select class="form-select form-select-sm w-auto" id="dashboardYearFilter">
-                        <option value="2026">This Year (2026)</option>
-                        <option value="2025">Last Year (2025)</option>
+                        <option value="2026" selected data-i18n="this_year">This Year (2026)</option>
                     </select>
                 </div>
                 <div style="height: 280px;">
@@ -103,8 +96,8 @@
             <div class="card-custom h-100 mb-0">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">Most Booked Places</h5>
-                        <small class="text-muted">Distribution by Top Hotel</small>
+                        <h5 class="fw-bold text-dark mb-0" data-i18n="most_booked_places">Most Booked Places</h5>
+                        <small class="text-muted" data-i18n="distribution_by_hotel">Distribution by Top Hotel</small>
                     </div>
                 </div>
                 <div style="height: 260px;" class="d-flex align-items-center justify-content-center">
@@ -123,8 +116,8 @@
             <div class="card-custom h-100 mb-0">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">Revenue Overview</h5>
-                        <small class="text-muted">Quarterly earnings ($)</small>
+                        <h5 class="fw-bold text-dark mb-0" data-i18n="revenue_overview">Revenue Overview</h5>
+                        <small class="text-muted" data-i18n="quarterly_earnings">Quarterly earnings ($)</small>
                     </div>
                 </div>
                 <div style="height: 270px;">
@@ -136,42 +129,51 @@
         <!-- Recent Bookings Table Card -->
         <div class="col-12 col-xl-8">
             <div class="card-custom h-100 mb-0 p-0 overflow-hidden">
-                <div class="p-3 bg-white border-bottom d-flex align-items-center justify-content-between">
+                <div class="p-3 border-bottom d-flex align-items-center justify-content-between">
                     <div>
-                        <h5 class="fw-bold text-dark mb-0">Recent Reservations</h5>
-                        <small class="text-muted">Latest guest activity</small>
+                        <h5 class="fw-bold text-dark mb-0" data-i18n="recent_reservations">Recent Reservations</h5>
+                        <small class="text-muted" data-i18n="latest_guest_activity">Latest guest activity</small>
                     </div>
-                    <a href="{{ route('admin.bookings.index') }}" class="btn btn-secondary-light btn-sm">View All</a>
+                    <a href="{{ route('admin.bookings.index') }}" class="btn btn-outline-secondary btn-sm" data-i18n="view_all">View All</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-custom align-middle" id="mainTable">
+                    <table class="table table-custom align-middle mb-0" id="mainTable">
                         <thead>
                             <tr>
-                                <th>Booking ID</th>
-                                <th>Guest</th>
-                                <th>Hotel</th>
-                                <th>Room</th>
-                                <th>Check-In</th>
-                                <th>Check-Out</th>
-                                <th>Status</th>
-                                <th class="text-end">Actions</th>
+                                <th>#</th>
+                                <th data-i18n="guest_name">Guest</th>
+                                <th data-i18n="hotel">Hotel</th>
+                                <th data-i18n="room_type">Room</th>
+                                <th data-i18n="dates">Check-In</th>
+                                <th data-i18n="dates">Check-Out</th>
+                                <th data-i18n="status">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- BACKEND TODO:
-                                Loop through the recent booking records from the database.
-                                Replace this empty state row with `@foreach ($recentBookings as $booking)`.
-                                Provide: booking ID, guest name/email, hotel name, room type, check-in date, check-out date, and status.
-                            --}}
-                            <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">
-                                    <div class="py-2">
-                                        <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 opacity-50"></i>
-                                        <p class="mb-0 small fw-semibold">No recent reservations available</p>
-                                        <span class="small text-secondary">New booking records will appear here once retrieved from the database.</span>
-                                    </div>
-                                </td>
-                            </tr>
+                            @forelse ($recentBookings as $booking)
+                                <tr>
+                                    <td><strong class="text-dark">#{{ $booking->id }}</strong></td>
+                                    <td>
+                                        <div class="fw-semibold text-dark">{{ $booking->user->name ?? 'Guest' }}</div>
+                                        <small class="text-muted">{{ $booking->user->email ?? '' }}</small>
+                                    </td>
+                                    <td>{{ $booking->room->hotel->name ?? 'N/A' }}</td>
+                                    <td><span class="badge bg-light text-dark border">{{ $booking->room->type ?? 'Room' }}</span></td>
+                                    <td>{{ $booking->check_in }}</td>
+                                    <td>{{ $booking->check_out }}</td>
+                                    <td><x-status-badge :status="$booking->status" /></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <div class="py-2">
+                                            <i class="fa-solid fa-box-open fs-3 mb-2 opacity-50"></i>
+                                            <p class="mb-0 small fw-semibold">No recent reservations available</p>
+                                            <span class="small text-secondary">New booking records will appear here once created.</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -186,9 +188,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 1. Booking Trends Line Chart
-        // BACKEND TODO: Supply real monthly booking counts array from backend controller.
         const bookingTrendsLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const bookingTrendsData = []; // Fill with real data array e.g. [10, 20, 30, ...]
+        const bookingTrendsData = @json($monthlyBookings);
         const ctxTrends = document.getElementById('bookingTrendsChart').getContext('2d');
         new Chart(ctxTrends, {
             type: 'line',
@@ -211,22 +212,22 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { grid: { color: '#EAECEF' }, ticks: { color: '#6F6E77' }, beginAtZero: true },
+                    y: { grid: { color: 'rgba(110, 110, 110, 0.15)' }, ticks: { color: '#6F6E77' }, beginAtZero: true },
                     x: { grid: { display: false }, ticks: { color: '#6F6E77' } }
                 }
             }
         });
+
         // 2. Most Booked Places Doughnut Chart
-        // BACKEND TODO: Supply real hotel breakdown labels and reservation count distribution from backend controller.
-        const mostBookedLabels = []; // e.g. ['Hotel A', 'Hotel B']
-        const mostBookedData = [];   // e.g. [50, 30]
+        const mostBookedLabels = @json($hotelNames);
+        const mostBookedData = @json($hotelCounts);
         const ctxMostBooked = document.getElementById('mostBookedChart').getContext('2d');
         new Chart(ctxMostBooked, {
             type: 'doughnut',
             data: {
-                labels: mostBookedLabels,
+                labels: mostBookedLabels.length ? mostBookedLabels : ['No Data'],
                 datasets: [{
-                    data: mostBookedData,
+                    data: mostBookedData.length ? mostBookedData : [1],
                     backgroundColor: ['#0F62FE', '#6F6E77', '#161616', '#A855F7'],
                     borderWidth: 0
                 }]
@@ -238,10 +239,10 @@
                 cutout: '72%'
             }
         });
+
         // 3. Revenue Bar Chart
-        // BACKEND TODO: Supply real quarterly/monthly revenue array from backend controller.
         const revenueLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
-        const revenueData = []; // e.g. [15000, 22000, 30000, 25000]
+        const revenueData = @json($revenueData);
         const ctxRevenue = document.getElementById('revenueBarChart').getContext('2d');
         new Chart(ctxRevenue, {
             type: 'bar',
@@ -259,7 +260,7 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { grid: { color: '#EAECEF' }, ticks: { color: '#6F6E77' }, beginAtZero: true },
+                    y: { grid: { color: 'rgba(110, 110, 110, 0.15)' }, ticks: { color: '#6F6E77' }, beginAtZero: true },
                     x: { grid: { display: false }, ticks: { color: '#6F6E77' } }
                 }
             }

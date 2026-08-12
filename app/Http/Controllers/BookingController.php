@@ -5,10 +5,43 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\Room;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
+    // عرض كل الحجوزات للأدمن
+    public function adminIndex(Request $request)
+    {
+        $query = Booking::with(['user', 'room.hotel']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('id', $search)
+                  ->orWhereHas('user', function ($uq) use ($search) {
+                      $uq->where('name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('hotel_id')) {
+            $query->whereHas('room', function ($rq) use ($request) {
+                $rq->where('hotel_id', $request->hotel_id);
+            });
+        }
+
+        $bookings = $query->latest()->paginate(10)->withQueryString();
+        $hotels = \App\Models\Hotel::all();
+
+        return view('admin.bookings.index', compact('bookings', 'hotels'));
+    }
+
     // عرض حجوزات المستخدم الحالي
     public function index()
     {
