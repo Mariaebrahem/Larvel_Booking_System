@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>إدارة الغرف</h3>
-        <a href="{{ route('rooms.create') }}" class="btn btn-primary">إضافة غرفة جديدة</a>
+        <a href="{{ route('admin.rooms.create') }}" class="btn btn-primary">إضافة غرفة جديدة</a>
     </div>
 
     <table class="table table-bordered table-striped align-middle">
@@ -44,8 +44,8 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('rooms.edit', $room) }}" class="btn btn-sm btn-warning">تعديل</a>
-                        <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="d-inline"
+                        <a href="{{ route('admin.rooms.edit', $room) }}" class="btn btn-sm btn-warning">تعديل</a>
+                        <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST" class="d-inline"
                               onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
                             @csrf
                             @method('DELETE')

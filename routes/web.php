@@ -16,31 +16,46 @@ use App\Http\Controllers\AuthController;
 // Authentication
 // =========================
 
-// صفحة تسجيل الدخول
+// Login page
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-// صفحة إنشاء الحساب
+// Register page
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register.show');
 
-// تسجيل الدخول
+// Login
 Route::post('/login', [AuthController::class, 'login'])
     ->name('login.submit');
 
-// إنشاء حساب
+// Register
 Route::post('/register', [AuthController::class, 'register'])
     ->name('register');
 
-// تسجيل الخروج
+// Logout
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
 // =========================
-// Admin Routes
+// Admin Dashboard
+// =========================
+
+// /admin → /admin/dashboard
+Route::get('/admin', function () {
+    return redirect('/admin/dashboard');
+});
+
+// Admin Dashboard
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
+
+// =========================
+// Admin CRUD Routes
 // =========================
 
 Route::middleware(['auth', 'admin'])
@@ -48,12 +63,16 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
 
+        // Cities
         Route::resource('cities', CityController::class);
 
+        // Hotels
         Route::resource('hotels', HotelController::class);
 
+        // Rooms
         Route::resource('rooms', RoomController::class);
 
+        // Reports
         Route::get('/reports', [ReportController::class, 'index'])
             ->name('reports.index');
     });
@@ -65,23 +84,23 @@ Route::middleware(['auth', 'admin'])
 
 Route::middleware('auth')->group(function () {
 
-    // حجوزات المستخدم
+    // User bookings
     Route::get('/my-bookings', [BookingController::class, 'index'])
         ->name('bookings.index');
 
-    // إنشاء حجز
+    // Create booking
     Route::post('/bookings', [BookingController::class, 'store'])
         ->name('bookings.store');
 
-    // إلغاء الحجز
+    // Cancel booking
     Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])
         ->name('bookings.cancel');
 
-    // موافقة الأدمن
+    // Approve booking
     Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])
         ->name('bookings.approve');
 
-    // رفض الأدمن
+    // Reject booking
     Route::post('/bookings/{id}/reject', [BookingController::class, 'reject'])
         ->name('bookings.reject');
 
@@ -93,7 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookings/{id}/check-out', [BookingController::class, 'checkOut'])
         ->name('bookings.checkOut');
 
-    // إضافة تقييم
+    // Add review
     Route::post('/reviews', [ReviewController::class, 'store'])
         ->name('reviews.store');
 });
@@ -120,10 +139,10 @@ Route::get('/', function () {
 // Public Hotels
 // =========================
 
-// قائمة الفنادق للمستخدم
+// Hotels list
 Route::get('/hotels', [HotelController::class, 'publicIndex'])
     ->name('hotels.index');
 
-// تفاصيل الفندق
+// Hotel details
 Route::get('/hotels/{hotel}', [HotelController::class, 'publicShow'])
     ->name('hotels.show');

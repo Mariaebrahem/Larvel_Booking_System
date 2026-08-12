@@ -29,7 +29,7 @@ class CityController extends Controller
 
         City::create($request->only('name'));
 
-        return redirect()->route('cities.index')->with('success', 'تم إضافة المدينة بنجاح');
+        return redirect()->route('admin.cities.index')->with('success', 'تم إضافة المدينة بنجاح');
     }
 
     // عرض فورم تعديل مدينة
@@ -47,7 +47,7 @@ class CityController extends Controller
 
         $city->update($request->only('name'));
 
-        return redirect()->route('cities.index')->with('success', 'تم تعديل المدينة بنجاح');
+        return redirect()->route('admin.cities.index')->with('success', 'تم تعديل المدينة بنجاح');
     }
 
     // حذف المدينة (Soft Delete)
@@ -55,6 +55,6 @@ class CityController extends Controller
     {
         $city->delete();
 
-        return redirect()->route('cities.index')->with('success', 'تم حذف المدينة بنجاح');
+        return redirect()->route('admin.cities.index')->with('success', 'تم حذف المدينة بنجاح');
     }
 }

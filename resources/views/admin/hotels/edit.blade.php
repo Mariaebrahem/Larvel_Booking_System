@@ -5,7 +5,7 @@
 @section('content')
     <h3>تعديل الفندق</h3>
 
-    <form action="{{ route('hotels.update', $hotel) }}" method="POST" class="mt-3">
+    <form action="{{ route('admin.hotels.update', $hotel) }}" method="POST" class="mt-3">
         @csrf
         @method('PUT')
 
@@ -47,6 +47,6 @@
         </div>
 
         <button type="submit" class="btn btn-success">حفظ التعديلات</button>
-        <a href="{{ route('hotels.index') }}" class="btn btn-secondary">إلغاء</a>
+        <a href="{{ route('admin.hotels.index') }}" class="btn btn-secondary">إلغاء</a>
     </form>
 @endsection

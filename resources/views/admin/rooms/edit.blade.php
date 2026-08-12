@@ -5,7 +5,7 @@
 @section('content')
     <h3>تعديل الغرفة</h3>
 
-    <form action="{{ route('rooms.update', $room) }}" method="POST" enctype="multipart/form-data" class="mt-3">
+    <form action="{{ route('admin.rooms.update', $room) }}" method="POST" enctype="multipart/form-data" class="mt-3">
         @csrf
         @method('PUT')
 
@@ -58,6 +58,6 @@
         </div>
 
         <button type="submit" class="btn btn-success">حفظ التعديلات</button>
-        <a href="{{ route('rooms.index') }}" class="btn btn-secondary">إلغاء</a>
+        <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary">إلغاء</a>
     </form>
 @endsection

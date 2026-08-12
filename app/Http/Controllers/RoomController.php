@@ -41,7 +41,7 @@ class RoomController extends Controller
 
         Room::create($data);
 
-        return redirect()->route('rooms.index')->with('success', 'تم إضافة الغرفة بنجاح');
+        return redirect()->route('admin.rooms.index')->with('success', 'تم إضافة الغرفة بنجاح');
     }
 
     public function edit(Room $room)
@@ -75,13 +75,13 @@ class RoomController extends Controller
 
         $room->update($data);
 
-        return redirect()->route('rooms.index')->with('success', 'تم تعديل الغرفة بنجاح');
+        return redirect()->route('admin.rooms.index')->with('success', 'تم تعديل الغرفة بنجاح');
     }
 
     public function destroy(Room $room)
     {
         $room->delete();
 
-        return redirect()->route('rooms.index')->with('success', 'تم حذف الغرفة بنجاح');
+        return redirect()->route('admin.rooms.index')->with('success', 'تم حذف الغرفة بنجاح');
     }
 }

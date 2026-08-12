@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>إدارة الفنادق</h3>
-        <a href="{{ route('hotels.create') }}" class="btn btn-primary">إضافة فندق جديد</a>
+        <a href="{{ route('admin.hotels.create') }}" class="btn btn-primary">إضافة فندق جديد</a>
     </div>
 
     <table class="table table-bordered table-striped">
@@ -23,11 +23,11 @@
                 <tr>
                     <td>{{ $hotel->id }}</td>
                     <td>{{ $hotel->name }}</td>
-                    <td>{{ $hotel->city->name }}</td>
+                    <td>{{ $hotel->city->name ?? 'غير محدد' }}</td>
                     <td>{{ $hotel->rating }}</td>
                     <td>
-                        <a href="{{ route('hotels.edit', $hotel) }}" class="btn btn-sm btn-warning">تعديل</a>
-                        <form action="{{ route('hotels.destroy', $hotel) }}" method="POST" class="d-inline"
+                        <a href="{{ route('admin.hotels.edit', $hotel) }}" class="btn btn-sm btn-warning">تعديل</a>
+                        <form action="{{ route('admin.hotels.destroy', $hotel) }}" method="POST" class="d-inline"
                               onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
                             @csrf
                             @method('DELETE')

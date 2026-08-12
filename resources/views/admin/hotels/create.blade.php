@@ -5,7 +5,7 @@
 @section('content')
     <h3>إضافة فندق جديد</h3>
 
-    <form action="{{ route('hotels.store') }}" method="POST" class="mt-3">
+    <form action="{{ route('admin.hotels.store') }}" method="POST" class="mt-3">
         @csrf
 
         <div class="mb-3">
@@ -47,6 +47,6 @@
         </div>
 
         <button type="submit" class="btn btn-success">حفظ</button>
-        <a href="{{ route('hotels.index') }}" class="btn btn-secondary">إلغاء</a>
+        <a href="{{ route('admin.hotels.index') }}" class="btn btn-secondary">إلغاء</a>
     </form>
 @endsection

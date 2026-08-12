@@ -20,12 +20,10 @@ class BookingController extends Controller
         return view('bookings.index', compact('bookings'));
     }
 
-    // إضافة حجز جديد
     public function store(StoreBookingRequest $request)
     {
         $room = Room::findOrFail($request->room_id);
 
-        // نتأكد إن الغرفة متاحة في التواريخ دي (مفيش تعارض حجز)
         $conflict = Booking::where('room_id', $room->id)
             ->whereIn('status', ['pending', 'approved', 'checked_in'])
             ->where(function ($query) use ($request) {
@@ -33,13 +31,16 @@ class BookingController extends Controller
                     ->orWhereBetween('check_out_date', [$request->check_in_date, $request->check_out_date])
                     ->orWhere(function ($q) use ($request) {
                         $q->where('check_in_date', '<=', $request->check_in_date)
-                          ->where('check_out_date', '>=', $request->check_out_date);
+                        ->where('check_out_date', '>=', $request->check_out_date);
                     });
             })
             ->exists();
 
         if ($conflict) {
-            return back()->with('error', 'This room is not available for the selected dates.');
+            return response()->json([
+                'success' => false,
+                'message' => 'هذه الغرفة غير متاحة في التواريخ المختارة.',
+            ], 422);
         }
 
         $nights = \Carbon\Carbon::parse($request->check_in_date)
@@ -47,7 +48,7 @@ class BookingController extends Controller
 
         $totalPrice = $nights * $room->price;
 
-        Booking::create([
+        $booking = Booking::create([
             'room_id' => $room->id,
             'user_id' => Auth::id(),
             'check_in_date' => $request->check_in_date,
@@ -56,9 +57,12 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
-        return back()->with('success', 'Booking created successfully. Waiting for approval.');
+        return response()->json([
+            'success' => true,
+            'message' => 'تم إنشاء الحجز بنجاح، في انتظار الموافقة.',
+            'booking' => $booking,
+        ]);
     }
-
     // إلغاء الحجز (المستخدم نفسه)
     public function cancel($id)
     {
@@ -70,9 +74,9 @@ class BookingController extends Controller
             return back()->with('error', 'Cannot cancel this booking anymore.');
         }
 
-        $booking->update(['status' => 'cancelled']);
+        $booking->delete();
 
-        return back()->with('success', 'Booking cancelled successfully.');
+        return back()->with('success', 'تم إلغاء الحجز وحذفه بنجاح.');
     }
 
     // موافقة الأدمن على الحجز

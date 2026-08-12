@@ -150,8 +150,17 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
-                    <a href="{{ url('/login') }}" class="btn btn-nav-outline btn-sm">تسجيل الدخول</a>
-                    <a href="{{ url('/register') }}" class="btn btn-nav-rose btn-sm">حساب جديد</a>
+                    @guest
+                        <a href="{{ url('/login') }}" class="btn btn-nav-outline btn-sm">تسجيل الدخول</a>
+                        <a href="{{ url('/register') }}" class="btn btn-nav-rose btn-sm">حساب جديد</a>
+                    @else
+                        <span class="fw-bold small">{{ auth()->user()->name }}</span>
+                        <a href="{{ url('/my-bookings') }}" class="btn btn-nav-outline btn-sm">حجوزاتي</a>
+                        <form action="{{ route('logout') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="btn btn-nav-rose btn-sm">تسجيل الخروج</button>
+                        </form>
+                    @endguest
                 </div>
             </div>
         </div>

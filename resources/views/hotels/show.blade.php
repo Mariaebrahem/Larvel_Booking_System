@@ -104,12 +104,6 @@
 
     @php
 
-        /*
-        |--------------------------------------------------------------------------
-        | صور مختلفة حسب رقم الفندق
-        |--------------------------------------------------------------------------
-        */
-
         $hotelImages = [
 
             [
@@ -150,7 +144,6 @@
 
         ];
 
-        // اختيار مجموعة الصور حسب ID الفندق
         $images = $hotelImages[($hotel->id - 1) % count($hotelImages)];
 
     @endphp
@@ -158,33 +151,25 @@
 
     <div class="row g-3 mb-5">
 
-        {{-- Main Image --}}
         <div class="col-md-8">
-
             <img
                 src="{{ $images[0] }}"
                 class="hotel-gallery-main shadow-sm"
                 alt="{{ $hotel->name }}"
             >
-
         </div>
 
-
-        {{-- Side Images --}}
         <div class="col-md-4 d-flex flex-column gap-3">
-
             <img
                 src="{{ $images[1] }}"
                 class="hotel-gallery-side shadow-sm"
                 alt="{{ $hotel->name }}"
             >
-
             <img
                 src="{{ $images[2] }}"
                 class="hotel-gallery-side shadow-sm"
                 alt="{{ $hotel->name }}"
             >
-
         </div>
 
     </div>
@@ -196,7 +181,6 @@
 
     <div class="row g-4">
 
-        {{-- Details --}}
         <div class="col-lg-8">
 
             <div class="card detail-card shadow-sm p-4 mb-4">
@@ -206,15 +190,8 @@
                 </h4>
 
                 <p class="text-muted lh-lg">
-
                     {{ $hotel->description ?? 'استمتع بإقامة مميزة ومريحة في هذا الفندق، مع خدمات متكاملة وموقع رائع يوفر لك تجربة إقامة لا تُنسى.' }}
-
                 </p>
-
-
-                {{-- =========================
-                    Amenities
-                ========================== --}}
 
                 <h5 class="fw-bold mt-4 mb-3">
                     الخدمات والمرافق
@@ -223,90 +200,51 @@
                 <div class="row g-3">
 
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-wifi text-primary me-2"></i>
-
                             إنترنت سريع مجاني
-
                         </div>
-
                     </div>
 
-
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-water-ladder text-primary me-2"></i>
-
                             حمام سباحة
-
                         </div>
-
                     </div>
 
-
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-square-parking text-primary me-2"></i>
-
                             موقف سيارات
-
                         </div>
-
                     </div>
 
-
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-utensils text-primary me-2"></i>
-
                             مطعم فاخر
-
                         </div>
-
                     </div>
 
-
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-dumbbell text-primary me-2"></i>
-
                             صالة ألعاب رياضية
-
                         </div>
-
                     </div>
 
-
                     <div class="col-6 col-md-4">
-
                         <div class="amenity-item">
-
                             <i class="fa-solid fa-ban-smoking text-primary me-2"></i>
-
                             غرف لغير التدخين
-
                         </div>
-
                     </div>
 
                 </div>
 
             </div>
 
-
-            {{-- =========================
-                Available Rooms
-            ========================== --}}
 
             <div class="card detail-card shadow-sm p-4">
 
@@ -321,34 +259,22 @@
                         <div class="d-flex justify-content-between align-items-center">
 
                             <div>
-
                                 <h6 class="fw-bold mb-1">
                                     {{ $room->name ?? 'غرفة فندقية' }}
                                 </h6>
-
                                 <small class="text-muted">
-
                                     <i class="fa-solid fa-bed me-1"></i>
-
                                     غرفة متاحة
-
                                 </small>
-
                             </div>
 
-
                             <div class="text-end">
-
                                 <div class="fw-bold text-primary">
-
                                     {{ number_format($room->price, 2) }}$
-
                                 </div>
-
                                 <small class="text-muted">
                                     / ليلة
                                 </small>
-
                             </div>
 
                         </div>
@@ -358,13 +284,10 @@
                 @empty
 
                     <div class="text-center text-muted py-4">
-
                         <i class="fa-solid fa-bed fs-2 mb-2"></i>
-
                         <p class="mb-0">
                             لا توجد غرف متاحة حالياً.
                         </p>
-
                     </div>
 
                 @endforelse
@@ -374,104 +297,70 @@
         </div>
 
 
-        {{-- =========================
-            Booking Box
-        ========================== --}}
-
         <div class="col-lg-4">
 
-            <div
-                class="card border-0 shadow-sm rounded-4 p-4 sticky-top booking-box"
-            >
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top booking-box">
 
                 <h5 class="fw-bold mb-3">
                     حجز الغرفة
                 </h5>
 
-
                 <form id="detailsBookingForm">
 
-                    {{-- Check in --}}
                     <div class="mb-3">
-
                         <label class="form-label small fw-bold">
                             تاريخ الوصول
                         </label>
-
                         <input
                             type="date"
-                            name="check_in"
+                            name="check_in_date"
                             class="form-control"
                             required
                         >
-
                     </div>
 
-
-                    {{-- Check out --}}
                     <div class="mb-3">
-
                         <label class="form-label small fw-bold">
                             تاريخ المغادرة
                         </label>
-
                         <input
                             type="date"
-                            name="check_out"
+                            name="check_out_date"
                             class="form-control"
                             required
                         >
-
                     </div>
 
-
-                    {{-- Room --}}
                     <div class="mb-3">
-
                         <label class="form-label small fw-bold">
                             نوع الغرفة
                         </label>
-
                         <select
                             name="room_id"
                             class="form-select"
                             required
                         >
-
                             @forelse($hotel->rooms as $room)
-
                                 <option value="{{ $room->id }}">
-
                                     {{ $room->name ?? 'غرفة فندقية' }}
-
                                     -
                                     {{ number_format($room->price, 2) }}$
-
                                 </option>
-
                             @empty
-
                                 <option disabled>
                                     لا توجد غرف متاحة
                                 </option>
-
                             @endforelse
-
                         </select>
-
                     </div>
-
 
                     <button
                         type="submit"
                         class="btn btn-primary btn-lg w-100 rounded-3 fw-bold mt-2"
                         @if($hotel->rooms->count() === 0) disabled @endif
                     >
-
                         <i class="fa-solid fa-calendar-check me-1"></i>
-
                         تأكيد الحجز الآن
-
                     </button>
 
                 </form>
@@ -486,33 +375,61 @@
 
 @endsection
 
-
 @push('scripts')
-
 <script>
-
     document
         .getElementById('detailsBookingForm')
         .addEventListener('submit', function(e) {
-
             e.preventDefault();
-
-            Swal.fire({
-
-                title: 'تم استلام طلب الحجز!',
-
-                text: 'شكراً لك، تم إرسال تفاصيل حجزك بنجاح وسيتواصل معك فريق الاستقبال.',
-
-                icon: 'success',
-
-                confirmButtonColor: '#0d6efd',
-
-                confirmButtonText: 'موافق'
-
+            const formData = new FormData(this);
+            fetch('{{ route("bookings.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    Swal.fire({
+                        title: 'محتاج تسجل دخول',
+                        text: 'لازم تسجل دخول الأول عشان تقدر تحجز.',
+                        icon: 'warning',
+                        confirmButtonText: 'تسجيل الدخول'
+                    }).then(() => {
+                        window.location.href = '{{ url("/login") }}';
+                    });
+                    return null;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
+                if (data.success !== false) {
+                    Swal.fire({
+                        title: 'تم استلام طلب الحجز!',
+                        text: 'شكراً لك، تم إرسال تفاصيل حجزك بنجاح.',
+                        icon: 'success',
+                        confirmButtonColor: '#0d6efd',
+                        confirmButtonText: 'موافق'
+                    });
+                    document.getElementById('detailsBookingForm').reset();
+                } else {
+                    Swal.fire({
+                        title: 'حصل خطأ',
+                        text: data.message || 'مقدرناش نكمل الحجز.',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: 'حصل خطأ',
+                    text: 'حصلت مشكلة، حاول تاني.',
+                    icon: 'error'
+                });
             });
-
         });
-
 </script>
-
 @endpush

@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>إدارة المدن</h3>
-        <a href="{{ route('cities.create') }}" class="btn btn-primary">إضافة مدينة جديدة</a>
+        <a href="{{ route('admin.cities.create') }}" class="btn btn-primary">إضافة مدينة جديدة</a>
     </div>
 
     <table class="table table-bordered table-striped">
@@ -24,8 +24,8 @@
                     <td>{{ $city->name }}</td>
                     <td>{{ $city->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <a href="{{ route('cities.edit', $city) }}" class="btn btn-sm btn-warning">تعديل</a>
-                        <form action="{{ route('cities.destroy', $city) }}" method="POST" class="d-inline"
+                        <a href="{{ route('admin.cities.edit', $city) }}" class="btn btn-sm btn-warning">تعديل</a>
+                        <form action="{{ route('admin.cities.destroy', $city) }}" method="POST" class="d-inline"
                               onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
                             @csrf
                             @method('DELETE')

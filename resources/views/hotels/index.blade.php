@@ -92,7 +92,6 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        display: block;
         transition: transform 0.6s ease;
     }
 
@@ -122,7 +121,6 @@
         background: rgba(111, 78, 55, 0.85);
         backdrop-filter: blur(8px);
         color: #FFF;
-        z-index: 2;
     }
 
     .btn-rose {
@@ -192,10 +190,7 @@
 
 <div class="container my-4">
 
-    {{-- ========================= --}}
     {{-- Header --}}
-    {{-- ========================= --}}
-
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
@@ -224,10 +219,7 @@
     </div>
 
 
-    {{-- ========================= --}}
     {{-- Search --}}
-    {{-- ========================= --}}
-
     <div class="hero-rose text-white p-4 p-md-5 mb-5">
 
         <h2 class="fw-bold mb-2">
@@ -237,6 +229,7 @@
         <p class="text-white-50 mb-4 small">
             استمتع بتجربة إقامة تجمع بين الفخامة والراحة
         </p>
+
 
         <form
             action="{{ route('hotels.index') }}"
@@ -250,14 +243,12 @@
                 <div class="col-md-5">
 
                     <label class="form-label fw-bold small text-muted">
-
                         <i
                             class="fa-solid fa-location-dot me-1"
                             style="color: var(--primary-rose);"
                         ></i>
 
                         المدينة / اسم الفندق
-
                     </label>
 
                     <input
@@ -275,14 +266,12 @@
                 <div class="col-md-3">
 
                     <label class="form-label fw-bold small text-muted">
-
                         <i
                             class="fa-solid fa-calendar-days me-1"
                             style="color: var(--primary-rose);"
                         ></i>
 
                         تاريخ الوصول
-
                     </label>
 
                     <input
@@ -299,14 +288,12 @@
                 <div class="col-md-2">
 
                     <label class="form-label fw-bold small text-muted">
-
                         <i
                             class="fa-solid fa-user-group me-1"
                             style="color: var(--primary-rose);"
                         ></i>
 
                         عدد الضيوف
-
                     </label>
 
                     <select
@@ -314,24 +301,18 @@
                         class="form-select border-0 bg-body-tertiary py-2"
                     >
 
-                        <option
-                            value="1"
-                            {{ request('guests') == 1 ? 'selected' : '' }}
-                        >
+                        <option value="1"
+                            {{ request('guests') == 1 ? 'selected' : '' }}>
                             شخص واحد
                         </option>
 
-                        <option
-                            value="2"
-                            {{ request('guests', 2) == 2 ? 'selected' : '' }}
-                        >
+                        <option value="2"
+                            {{ request('guests', 2) == 2 ? 'selected' : '' }}>
                             شخصين
                         </option>
 
-                        <option
-                            value="4"
-                            {{ request('guests') == 4 ? 'selected' : '' }}
-                        >
+                        <option value="4"
+                            {{ request('guests') == 4 ? 'selected' : '' }}>
                             4 أشخاص
                         </option>
 
@@ -347,11 +328,8 @@
                         type="submit"
                         class="btn btn-rose w-100 py-2 rounded-3 fw-bold"
                     >
-
                         <i class="fa-solid fa-magnifying-glass me-1"></i>
-
                         بحث
-
                     </button>
 
                 </div>
@@ -363,10 +341,7 @@
     </div>
 
 
-    {{-- ========================= --}}
     {{-- Search Result --}}
-    {{-- ========================= --}}
-
     @if(request('query'))
 
         <div class="alert alert-light border mb-4">
@@ -384,10 +359,7 @@
     @endif
 
 
-    {{-- ========================= --}}
     {{-- Hotels --}}
-    {{-- ========================= --}}
-
     <div class="row g-4 mb-5">
 
         @forelse($hotels as $hotel)
@@ -396,36 +368,24 @@
 
                 <div class="card hotel-card h-100">
 
-                    {{-- ========================= --}}
                     {{-- Hotel Image --}}
-                    {{-- ========================= --}}
-
                     <div class="hotel-img-wrapper">
 
-                        @if(!empty($hotel->random_image))
-
-                            <img
-                                src="{{ $hotel->random_image }}"
-                                alt="{{ $hotel->name }}"
-                                loading="lazy"
-                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=700&q=80';"
-                            >
-
-                        @else
-
-                            <div class="hotel-placeholder">
-
-                                <i class="fa-solid fa-hotel"></i>
-
-                            </div>
-
-                        @endif
+                    @if(!empty($hotel->random_image))
+                    <img
+                        src="{{ $hotel->random_image }}"
+                        alt="{{ $hotel->name }}"
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=700&q=80';"
+                    >
+                @else
+                    <div class="hotel-placeholder">
+                        <i class="fa-solid fa-hotel"></i>
+                    </div>
+                @endif
 
 
-                        {{-- ========================= --}}
                         {{-- Price --}}
-                        {{-- ========================= --}}
-
                         @if($hotel->rooms->count() > 0)
 
                             @php
@@ -445,10 +405,7 @@
                     </div>
 
 
-                    {{-- ========================= --}}
                     {{-- Card Body --}}
-                    {{-- ========================= --}}
-
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
 
                         <div>
@@ -457,11 +414,8 @@
                             <div class="d-flex justify-content-between align-items-start mb-2">
 
                                 <h5 class="fw-bold mb-0">
-
                                     {{ $hotel->name }}
-
                                 </h5>
-
 
                                 @if($hotel->rating)
 
@@ -486,9 +440,7 @@
                                 {{ $hotel->city->name ?? 'غير محدد' }}
 
                                 @if($hotel->address)
-
                                     - {{ $hotel->address }}
-
                                 @endif
 
                             </p>
@@ -500,14 +452,6 @@
                                 <p class="hotel-description small mb-3">
 
                                     {{ Str::limit($hotel->description, 100) }}
-
-                                </p>
-
-                            @else
-
-                                <p class="hotel-description small mb-3">
-
-                                    فندق مميز يوفر لك إقامة مريحة وتجربة رائعة.
 
                                 </p>
 
@@ -545,21 +489,16 @@
                         </div>
 
 
-                        {{-- ========================= --}}
-                        {{-- Button --}}
-                        {{-- ========================= --}}
-
+                        {{-- Buttons --}}
                         <div class="pt-3 border-top border-secondary-subtle">
 
                             <a
                                 href="{{ route('hotels.show', $hotel) }}"
                                 class="btn btn-outline-rose rounded-3 w-100 fw-bold"
                             >
-
                                 <i class="fa-solid fa-eye me-1"></i>
 
                                 عرض التفاصيل
-
                             </a>
 
                         </div>
@@ -572,10 +511,7 @@
 
         @empty
 
-            {{-- ========================= --}}
             {{-- No Hotels --}}
-            {{-- ========================= --}}
-
             <div class="col-12">
 
                 <div class="text-center py-5">
@@ -593,17 +529,12 @@
                     </div>
 
                     <h4 class="fw-bold">
-
                         لا توجد فنادق
-
                     </h4>
 
                     <p class="text-muted">
-
                         لم يتم العثور على فنادق مطابقة لبحثك.
-
                     </p>
-
 
                     @if(request('query'))
 
@@ -611,9 +542,7 @@
                             href="{{ route('hotels.index') }}"
                             class="btn btn-rose rounded-3 px-4"
                         >
-
                             عرض جميع الفنادق
-
                         </a>
 
                     @endif
@@ -627,10 +556,7 @@
     </div>
 
 
-    {{-- ========================= --}}
     {{-- Pagination --}}
-    {{-- ========================= --}}
-
     @if($hotels->hasPages())
 
         <nav aria-label="Page navigation">
@@ -673,31 +599,27 @@
     updateToggleUI(currentTheme);
 
 
-    if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
 
-        toggleBtn.addEventListener('click', function () {
+        const theme =
+            document.documentElement.getAttribute('data-theme');
 
-            const theme =
-                document.documentElement.getAttribute('data-theme');
+        const newTheme =
+            theme === 'dark' ? 'light' : 'dark';
 
-            const newTheme =
-                theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute(
+            'data-theme',
+            newTheme
+        );
 
-            document.documentElement.setAttribute(
-                'data-theme',
-                newTheme
-            );
+        localStorage.setItem(
+            'theme',
+            newTheme
+        );
 
-            localStorage.setItem(
-                'theme',
-                newTheme
-            );
+        updateToggleUI(newTheme);
 
-            updateToggleUI(newTheme);
-
-        });
-
-    }
+    });
 
 
     function updateToggleUI(theme) {
@@ -717,9 +639,7 @@
 
             themeText.innerText =
                 'المظهر الداكن';
-
         }
-
     }
 
 </script>

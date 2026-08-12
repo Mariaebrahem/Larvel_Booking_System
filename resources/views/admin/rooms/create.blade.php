@@ -6,7 +6,7 @@
     <h3>إضافة غرفة جديدة</h3>
 
     {{-- enctype ضروري جداً عشان رفع الملفات يشتغل --}}
-    <form action="{{ route('rooms.store') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+    <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data" class="mt-3">
         @csrf
 
         <div class="mb-3">
@@ -67,6 +67,6 @@
         </div>
 
         <button type="submit" class="btn btn-success">حفظ</button>
-        <a href="{{ route('rooms.index') }}" class="btn btn-secondary">إلغاء</a>
+        <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary">إلغاء</a>
     </form>
 @endsection

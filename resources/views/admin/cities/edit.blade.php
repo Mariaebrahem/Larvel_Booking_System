@@ -5,7 +5,7 @@
 @section('content')
     <h3>تعديل مدينة</h3>
 
-    <form action="{{ route('cities.update', $city) }}" method="POST" class="mt-3">
+    <form action="{{ route('admin.cities.update', $city) }}" method="POST" class="mt-3">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -16,6 +16,6 @@
             @enderror
         </div>
         <button type="submit" class="btn btn-success">حفظ التعديلات</button>
-        <a href="{{ route('cities.index') }}" class="btn btn-secondary">إلغاء</a>
+        <a href="{{ route('admin.cities.index') }}" class="btn btn-secondary">إلغاء</a>
     </form>
 @endsection
