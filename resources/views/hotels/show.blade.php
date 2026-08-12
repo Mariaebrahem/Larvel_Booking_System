@@ -41,14 +41,11 @@
 </style>
 @endpush
 
-
 @section('content')
 
 <div class="container my-5">
 
-    {{-- =========================
-        Hotel Header
-    ========================== --}}
+    {{-- Hotel Header --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
 
         <div>
@@ -79,29 +76,25 @@
                     {{ number_format($minPrice, 2) }}$
                 </span>
 
-                <span class="text-muted">
+                <span
+                    class="text-muted"
+                    data-i18n="per_night">
                     / ليلة
                 </span>
 
             @endif
 
             <div class="text-warning mt-1">
-
                 <i class="fa-solid fa-star"></i>
 
                 {{ number_format($hotel->rating ?? 0, 1) }}
-
             </div>
 
         </div>
 
     </div>
 
-
-    {{-- =========================
-        Image Gallery
-    ========================== --}}
-
+    {{-- Image Gallery --}}
     @php
 
         $hotelImages = [
@@ -148,7 +141,6 @@
 
     @endphp
 
-
     <div class="row g-3 mb-5">
 
         <div class="col-md-8">
@@ -160,32 +152,31 @@
         </div>
 
         <div class="col-md-4 d-flex flex-column gap-3">
+
             <img
                 src="{{ $images[1] }}"
                 class="hotel-gallery-side shadow-sm"
                 alt="{{ $hotel->name }}"
             >
+
             <img
                 src="{{ $images[2] }}"
                 class="hotel-gallery-side shadow-sm"
                 alt="{{ $hotel->name }}"
             >
+
         </div>
 
     </div>
 
-
-    {{-- =========================
-        Details
-    ========================== --}}
-
+    {{-- Details --}}
     <div class="row g-4">
 
         <div class="col-lg-8">
 
             <div class="card detail-card shadow-sm p-4 mb-4">
 
-                <h4 class="fw-bold mb-3">
+                <h4 class="fw-bold mb-3" data-i18n="about_hotel">
                     عن الفندق
                 </h4>
 
@@ -193,7 +184,7 @@
                     {{ $hotel->description ?? 'استمتع بإقامة مميزة ومريحة في هذا الفندق، مع خدمات متكاملة وموقع رائع يوفر لك تجربة إقامة لا تُنسى.' }}
                 </p>
 
-                <h5 class="fw-bold mt-4 mb-3">
+                <h5 class="fw-bold mt-4 mb-3" data-i18n="amenities">
                     الخدمات والمرافق
                 </h5>
 
@@ -202,42 +193,54 @@
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-wifi text-primary me-2"></i>
-                            إنترنت سريع مجاني
+                            <span data-i18n="free_wifi">
+                                إنترنت سريع مجاني
+                            </span>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-water-ladder text-primary me-2"></i>
-                            حمام سباحة
+                            <span data-i18n="swimming_pool">
+                                حمام سباحة
+                            </span>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-square-parking text-primary me-2"></i>
-                            موقف سيارات
+                            <span data-i18n="parking">
+                                موقف سيارات
+                            </span>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-utensils text-primary me-2"></i>
-                            مطعم فاخر
+                            <span data-i18n="restaurant">
+                                مطعم فاخر
+                            </span>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-dumbbell text-primary me-2"></i>
-                            صالة ألعاب رياضية
+                            <span data-i18n="gym">
+                                صالة ألعاب رياضية
+                            </span>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-4">
                         <div class="amenity-item">
                             <i class="fa-solid fa-ban-smoking text-primary me-2"></i>
-                            غرف لغير التدخين
+                            <span data-i18n="non_smoking_rooms">
+                                غرف لغير التدخين
+                            </span>
                         </div>
                     </div>
 
@@ -245,10 +248,10 @@
 
             </div>
 
-
+            {{-- Available Rooms --}}
             <div class="card detail-card shadow-sm p-4">
 
-                <h4 class="fw-bold mb-4">
+                <h4 class="fw-bold mb-4" data-i18n="available_rooms">
                     الغرف المتاحة
                 </h4>
 
@@ -259,22 +262,31 @@
                         <div class="d-flex justify-content-between align-items-center">
 
                             <div>
+
                                 <h6 class="fw-bold mb-1">
                                     {{ $room->name ?? 'غرفة فندقية' }}
                                 </h6>
+
                                 <small class="text-muted">
                                     <i class="fa-solid fa-bed me-1"></i>
-                                    غرفة متاحة
+
+                                    <span data-i18n="available_room">
+                                        غرفة متاحة
+                                    </span>
                                 </small>
+
                             </div>
 
                             <div class="text-end">
+
                                 <div class="fw-bold text-primary">
                                     {{ number_format($room->price, 2) }}$
                                 </div>
-                                <small class="text-muted">
+
+                                <small class="text-muted" data-i18n="per_night">
                                     / ليلة
                                 </small>
+
                             </div>
 
                         </div>
@@ -284,10 +296,13 @@
                 @empty
 
                     <div class="text-center text-muted py-4">
+
                         <i class="fa-solid fa-bed fs-2 mb-2"></i>
-                        <p class="mb-0">
+
+                        <p class="mb-0" data-i18n="no_available_rooms">
                             لا توجد غرف متاحة حالياً.
                         </p>
+
                     </div>
 
                 @endforelse
@@ -296,62 +311,83 @@
 
         </div>
 
-
+        {{-- Booking Box --}}
         <div class="col-lg-4">
 
             <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top booking-box">
 
-                <h5 class="fw-bold mb-3">
+                <h5 class="fw-bold mb-3" data-i18n="book_room">
                     حجز الغرفة
                 </h5>
 
                 <form id="detailsBookingForm">
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
+
+                        <label
+                            class="form-label small fw-bold"
+                            data-i18n="check_in">
                             تاريخ الوصول
                         </label>
+
                         <input
                             type="date"
                             name="check_in_date"
                             class="form-control"
                             required
                         >
+
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
+
+                        <label
+                            class="form-label small fw-bold"
+                            data-i18n="check_out">
                             تاريخ المغادرة
                         </label>
+
                         <input
                             type="date"
                             name="check_out_date"
                             class="form-control"
                             required
                         >
+
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">
+
+                        <label
+                            class="form-label small fw-bold"
+                            data-i18n="room_type">
                             نوع الغرفة
                         </label>
+
                         <select
                             name="room_id"
                             class="form-select"
                             required
                         >
+
                             @forelse($hotel->rooms as $room)
+
                                 <option value="{{ $room->id }}">
                                     {{ $room->name ?? 'غرفة فندقية' }}
                                     -
                                     {{ number_format($room->price, 2) }}$
                                 </option>
+
                             @empty
-                                <option disabled>
+
+                                <option disabled data-i18n="no_available_rooms">
                                     لا توجد غرف متاحة
                                 </option>
+
                             @endforelse
+
                         </select>
+
                     </div>
 
                     <button
@@ -359,8 +395,13 @@
                         class="btn btn-primary btn-lg w-100 rounded-3 fw-bold mt-2"
                         @if($hotel->rooms->count() === 0) disabled @endif
                     >
+
                         <i class="fa-solid fa-calendar-check me-1"></i>
-                        تأكيد الحجز الآن
+
+                        <span data-i18n="confirm_booking">
+                            تأكيد الحجز الآن
+                        </span>
+
                     </button>
 
                 </form>
@@ -376,60 +417,145 @@
 @endsection
 
 @push('scripts')
+
 <script>
+
     document
         .getElementById('detailsBookingForm')
         .addEventListener('submit', function(e) {
+
             e.preventDefault();
+
             const formData = new FormData(this);
+
             fetch('{{ route("bookings.store") }}', {
+
                 method: 'POST',
+
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'Accept': 'application/json'
                 },
+
                 body: formData
+
             })
+
             .then(response => {
+
                 if (response.status === 401) {
+
+                    const isArabic =
+                        document.documentElement.lang === 'ar';
+
                     Swal.fire({
-                        title: 'محتاج تسجل دخول',
-                        text: 'لازم تسجل دخول الأول عشان تقدر تحجز.',
+
+                        title: isArabic
+                            ? 'محتاج تسجل دخول'
+                            : 'Login Required',
+
+                        text: isArabic
+                            ? 'لازم تسجل دخول الأول عشان تقدر تحجز.'
+                            : 'You need to login first to make a booking.',
+
                         icon: 'warning',
-                        confirmButtonText: 'تسجيل الدخول'
+
+                        confirmButtonText: isArabic
+                            ? 'تسجيل الدخول'
+                            : 'Login'
+
                     }).then(() => {
+
                         window.location.href = '{{ url("/login") }}';
+
                     });
+
                     return null;
                 }
+
                 return response.json();
+
             })
+
             .then(data => {
+
                 if (!data) return;
+
+                const isArabic =
+                    document.documentElement.lang === 'ar';
+
                 if (data.success !== false) {
+
                     Swal.fire({
-                        title: 'تم استلام طلب الحجز!',
-                        text: 'شكراً لك، تم إرسال تفاصيل حجزك بنجاح.',
+
+                        title: isArabic
+                            ? 'تم استلام طلب الحجز!'
+                            : 'Booking Request Received!',
+
+                        text: isArabic
+                            ? 'شكراً لك، تم إرسال تفاصيل حجزك بنجاح.'
+                            : 'Thank you, your booking details have been submitted successfully.',
+
                         icon: 'success',
+
                         confirmButtonColor: '#0d6efd',
-                        confirmButtonText: 'موافق'
+
+                        confirmButtonText: isArabic
+                            ? 'موافق'
+                            : 'OK'
+
                     });
-                    document.getElementById('detailsBookingForm').reset();
+
+                    document
+                        .getElementById('detailsBookingForm')
+                        .reset();
+
                 } else {
+
                     Swal.fire({
-                        title: 'حصل خطأ',
-                        text: data.message || 'مقدرناش نكمل الحجز.',
+
+                        title: isArabic
+                            ? 'حصل خطأ'
+                            : 'Something Went Wrong',
+
+                        text: data.message ||
+                            (
+                                isArabic
+                                    ? 'مقدرناش نكمل الحجز.'
+                                    : 'We could not complete the booking.'
+                            ),
+
                         icon: 'error'
+
                     });
+
                 }
+
             })
+
             .catch(() => {
+
+                const isArabic =
+                    document.documentElement.lang === 'ar';
+
                 Swal.fire({
-                    title: 'حصل خطأ',
-                    text: 'حصلت مشكلة، حاول تاني.',
+
+                    title: isArabic
+                        ? 'حصل خطأ'
+                        : 'Something Went Wrong',
+
+                    text: isArabic
+                        ? 'حصلت مشكلة، حاول تاني.'
+                        : 'Something went wrong, please try again.',
+
                     icon: 'error'
+
                 });
+
             });
+
         });
+
 </script>
+
 @endpush

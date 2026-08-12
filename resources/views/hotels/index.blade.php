@@ -185,7 +185,6 @@
 </style>
 @endpush
 
-
 @section('content')
 
 <div class="container my-4">
@@ -194,11 +193,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h3 class="fw-bold mb-0">
+            <h3 class="fw-bold mb-0" data-i18n="hotels_hero_title">
                 الملاذ المثالي لراحتك
             </h3>
 
-            <p class="text-muted small mb-0">
+            <p class="text-muted small mb-0" data-i18n="hotels_hero_subtitle">
                 اختر من بين تشكيلة فاخرة من الفنادق المصممة خصيصاً لأجلك
             </p>
         </div>
@@ -211,25 +210,23 @@
         >
             <i class="fa-solid fa-moon text-warning" id="themeIcon"></i>
 
-            <span id="themeText">
+            <span id="themeText" data-i18n="theme_dark">
                 المظهر الداكن
             </span>
         </button>
 
     </div>
 
-
     {{-- Search --}}
     <div class="hero-rose text-white p-4 p-md-5 mb-5">
 
-        <h2 class="fw-bold mb-2">
+        <h2 class="fw-bold mb-2" data-i18n="search_destination">
             ابحث عن وجهتك القادمة
         </h2>
 
-        <p class="text-white-50 mb-4 small">
+        <p class="text-white-50 mb-4 small" data-i18n="search_description">
             استمتع بتجربة إقامة تجمع بين الفخامة والراحة
         </p>
-
 
         <form
             action="{{ route('hotels.index') }}"
@@ -248,7 +245,9 @@
                             style="color: var(--primary-rose);"
                         ></i>
 
-                        المدينة / اسم الفندق
+                        <span data-i18n="city_or_hotel">
+                            المدينة / اسم الفندق
+                        </span>
                     </label>
 
                     <input
@@ -257,10 +256,10 @@
                         value="{{ request('query') }}"
                         class="form-control border-0 bg-body-tertiary py-2"
                         placeholder="القاهرة، شرم الشيخ، أسوان..."
+                        data-i18n-placeholder="search_placeholder"
                     >
 
                 </div>
-
 
                 {{-- Check in --}}
                 <div class="col-md-3">
@@ -271,7 +270,9 @@
                             style="color: var(--primary-rose);"
                         ></i>
 
-                        تاريخ الوصول
+                        <span data-i18n="check_in">
+                            تاريخ الوصول
+                        </span>
                     </label>
 
                     <input
@@ -283,7 +284,6 @@
 
                 </div>
 
-
                 {{-- Guests --}}
                 <div class="col-md-2">
 
@@ -293,7 +293,9 @@
                             style="color: var(--primary-rose);"
                         ></i>
 
-                        عدد الضيوف
+                        <span data-i18n="guests_count">
+                            عدد الضيوف
+                        </span>
                     </label>
 
                     <select
@@ -301,25 +303,33 @@
                         class="form-select border-0 bg-body-tertiary py-2"
                     >
 
-                        <option value="1"
-                            {{ request('guests') == 1 ? 'selected' : '' }}>
+                        <option
+                            value="1"
+                            {{ request('guests') == 1 ? 'selected' : '' }}
+                            data-i18n="one_guest"
+                        >
                             شخص واحد
                         </option>
 
-                        <option value="2"
-                            {{ request('guests', 2) == 2 ? 'selected' : '' }}>
+                        <option
+                            value="2"
+                            {{ request('guests', 2) == 2 ? 'selected' : '' }}
+                            data-i18n="two_guests"
+                        >
                             شخصين
                         </option>
 
-                        <option value="4"
-                            {{ request('guests') == 4 ? 'selected' : '' }}>
+                        <option
+                            value="4"
+                            {{ request('guests') == 4 ? 'selected' : '' }}
+                            data-i18n="four_guests"
+                        >
                             4 أشخاص
                         </option>
 
                     </select>
 
                 </div>
-
 
                 {{-- Search Button --}}
                 <div class="col-md-2">
@@ -329,7 +339,10 @@
                         class="btn btn-rose w-100 py-2 rounded-3 fw-bold"
                     >
                         <i class="fa-solid fa-magnifying-glass me-1"></i>
-                        بحث
+
+                        <span data-i18n="search_button">
+                            بحث
+                        </span>
                     </button>
 
                 </div>
@@ -340,7 +353,6 @@
 
     </div>
 
-
     {{-- Search Result --}}
     @if(request('query'))
 
@@ -348,7 +360,9 @@
 
             <i class="fa-solid fa-magnifying-glass me-2"></i>
 
-            نتائج البحث عن:
+            <span data-i18n="search_results_for">
+                نتائج البحث عن:
+            </span>
 
             <strong>
                 {{ request('query') }}
@@ -357,7 +371,6 @@
         </div>
 
     @endif
-
 
     {{-- Hotels --}}
     <div class="row g-4 mb-5">
@@ -371,19 +384,22 @@
                     {{-- Hotel Image --}}
                     <div class="hotel-img-wrapper">
 
-                    @if(!empty($hotel->random_image))
-                    <img
-                        src="{{ $hotel->random_image }}"
-                        alt="{{ $hotel->name }}"
-                        loading="lazy"
-                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=700&q=80';"
-                    >
-                @else
-                    <div class="hotel-placeholder">
-                        <i class="fa-solid fa-hotel"></i>
-                    </div>
-                @endif
+                        @if(!empty($hotel->random_image))
 
+                            <img
+                                src="{{ $hotel->random_image }}"
+                                alt="{{ $hotel->name }}"
+                                loading="lazy"
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=700&q=80';"
+                            >
+
+                        @else
+
+                            <div class="hotel-placeholder">
+                                <i class="fa-solid fa-hotel"></i>
+                            </div>
+
+                        @endif
 
                         {{-- Price --}}
                         @if($hotel->rooms->count() > 0)
@@ -396,14 +412,15 @@
 
                                 {{ number_format($minPrice, 2) }} $
 
-                                / ليلة
+                                <span data-i18n="per_night">
+                                    / ليلة
+                                </span>
 
                             </span>
 
                         @endif
 
                     </div>
-
 
                     {{-- Card Body --}}
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
@@ -431,7 +448,6 @@
 
                             </div>
 
-
                             {{-- City --}}
                             <p class="text-muted small mb-3">
 
@@ -445,18 +461,14 @@
 
                             </p>
 
-
                             {{-- Description --}}
                             @if($hotel->description)
 
                                 <p class="hotel-description small mb-3">
-
                                     {{ Str::limit($hotel->description, 100) }}
-
                                 </p>
 
                             @endif
-
 
                             {{-- Rooms --}}
                             <div class="d-flex flex-wrap gap-2 mb-3">
@@ -467,10 +479,11 @@
 
                                     {{ $hotel->rooms->count() }}
 
-                                    غرفة متاحة
+                                    <span data-i18n="available_room">
+                                        غرفة متاحة
+                                    </span>
 
                                 </span>
-
 
                                 @if($hotel->rating >= 4.5)
 
@@ -478,7 +491,9 @@
 
                                         <i class="fa-solid fa-crown"></i>
 
-                                        فندق مميز
+                                        <span data-i18n="featured_hotel">
+                                            فندق مميز
+                                        </span>
 
                                     </span>
 
@@ -487,7 +502,6 @@
                             </div>
 
                         </div>
-
 
                         {{-- Buttons --}}
                         <div class="pt-3 border-top border-secondary-subtle">
@@ -498,7 +512,9 @@
                             >
                                 <i class="fa-solid fa-eye me-1"></i>
 
-                                عرض التفاصيل
+                                <span data-i18n="view_details">
+                                    عرض التفاصيل
+                                </span>
                             </a>
 
                         </div>
@@ -528,11 +544,11 @@
 
                     </div>
 
-                    <h4 class="fw-bold">
+                    <h4 class="fw-bold" data-i18n="no_hotels">
                         لا توجد فنادق
                     </h4>
 
-                    <p class="text-muted">
+                    <p class="text-muted" data-i18n="no_hotels_match">
                         لم يتم العثور على فنادق مطابقة لبحثك.
                     </p>
 
@@ -541,6 +557,7 @@
                         <a
                             href="{{ route('hotels.index') }}"
                             class="btn btn-rose rounded-3 px-4"
+                            data-i18n="show_all_hotels"
                         >
                             عرض جميع الفنادق
                         </a>
@@ -555,16 +572,13 @@
 
     </div>
 
-
     {{-- Pagination --}}
     @if($hotels->hasPages())
 
         <nav aria-label="Page navigation">
 
             <div class="d-flex justify-content-center custom-pagination">
-
                 {{ $hotels->onEachSide(1)->links() }}
-
             </div>
 
         </nav>
@@ -575,18 +589,12 @@
 
 @endsection
 
-
 @push('scripts')
 
 <script>
 
-    // =========================
-    // Dark / Light Mode
-    // =========================
-
     const toggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
-    const themeText = document.getElementById('themeText');
 
     const currentTheme =
         localStorage.getItem('theme') || 'light';
@@ -597,7 +605,6 @@
     );
 
     updateToggleUI(currentTheme);
-
 
     toggleBtn.addEventListener('click', function () {
 
@@ -621,7 +628,6 @@
 
     });
 
-
     function updateToggleUI(theme) {
 
         if (theme === 'dark') {
@@ -629,16 +635,11 @@
             themeIcon.className =
                 'fa-solid fa-sun text-warning';
 
-            themeText.innerText =
-                'المظهر الفاتح';
-
         } else {
 
             themeIcon.className =
                 'fa-solid fa-moon text-dark';
 
-            themeText.innerText =
-                'المظهر الداكن';
         }
     }
 
