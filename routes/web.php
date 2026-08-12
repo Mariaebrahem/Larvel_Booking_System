@@ -10,6 +10,7 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PageController;
 
 
 // =========================
@@ -40,28 +41,23 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 // =========================
-// Admin Dashboard
-// =========================
-
-// /admin → /admin/dashboard
-Route::get('/admin', function () {
-    return redirect('/admin/dashboard');
-});
-
-// Admin Dashboard
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-
-
-// =========================
-// Admin CRUD Routes
+// Admin Dashboard & CRUD Routes
 // =========================
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
+        // /admin → /admin/dashboard
+        Route::get('/', function () {
+            return redirect('/admin/dashboard');
+        });
+
+        // Admin Dashboard
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
 
         // Cities
         Route::resource('cities', CityController::class);
@@ -124,6 +120,17 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/search', [SearchController::class, 'search'])
     ->name('search');
+
+
+// =========================
+// Static Pages
+// =========================
+
+Route::get('/offers', [PageController::class, 'offers'])
+    ->name('offers');
+
+Route::get('/support', [PageController::class, 'support'])
+    ->name('support');
 
 
 // =========================

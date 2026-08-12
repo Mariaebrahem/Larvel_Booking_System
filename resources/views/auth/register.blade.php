@@ -64,7 +64,11 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-rose btn-lg w-100 rounded-3 fw-bold mb-3 shadow-sm">
+                        <button type="submit"
+                                class="btn btn-rose btn-lg w-100 rounded-3 fw-bold mb-3"
+                                style="font-size: 1.05rem; box-shadow: 0 4px 15px rgba(200, 138, 117, 0.35); border: 2px solid var(--primary-rose); transition: all 0.3s ease;"
+                                onmouseover="this.style.boxShadow='0 8px 25px rgba(200, 138, 117, 0.55)'; this.style.transform='translateY(-3px) scale(1.02)';"
+                                onmouseout="this.style.boxShadow='0 4px 15px rgba(200, 138, 117, 0.35)'; this.style.transform='translateY(0) scale(1)';">
                             <i class="fa-solid fa-user-check me-2"></i> Create Account
                         </button>
 

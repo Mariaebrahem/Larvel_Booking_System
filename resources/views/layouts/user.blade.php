@@ -142,10 +142,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-tags me-1"></i> العروض والخصومات</a>
+                        <a class="nav-link" href="{{ route('offers') }}"><i class="fa-solid fa-tags me-1"></i> العروض والخصومات</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-headset me-1"></i> الدعم الفني</a>
+                        <a class="nav-link" href="{{ route('support') }}"><i class="fa-solid fa-headset me-1"></i> الدعم الفني</a>
                     </li>
                 </ul>
 

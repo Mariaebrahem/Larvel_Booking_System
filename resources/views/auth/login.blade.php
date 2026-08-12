@@ -25,7 +25,14 @@
                         <label class="form-label fw-bold small">كلمة المرور</label>
                         <input type="password" name="password" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-rose w-100 py-2 fw-bold rounded-3 mt-2">دخول</button>
+                        <button type="submit"
+                                class="btn btn-rose w-100 py-3 fw-bold rounded-3 mt-2"
+                                style="font-size: 1.05rem; box-shadow: 0 4px 15px rgba(200, 138, 117, 0.35); border: 2px solid var(--primary-rose); transition: all 0.3s ease;"
+                                onmouseover="this.style.boxShadow='0 8px 25px rgba(200, 138, 117, 0.55)'; this.style.transform='translateY(-3px) scale(1.02)';"
+                                onmouseout="this.style.boxShadow='0 4px 15px rgba(200, 138, 117, 0.35)'; this.style.transform='translateY(0) scale(1)';">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i>
+                            دخول
+                        </button>
                 </form>
 
                 <div class="text-center mt-3">
